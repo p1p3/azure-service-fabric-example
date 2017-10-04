@@ -10,34 +10,35 @@ using Microsoft.ServiceFabric.Services.Client;
 namespace IUGO.Companies.API.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class CompaniesController : Controller
     {
         private readonly ICompanyService _companyService;
 
-        public ValuesController(ICompanyService companyService)
+        public CompaniesController(ICompanyService companyService)
         {
             _companyService = companyService;
         }
 
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IEnumerable<Company>> Get()
         {
-            return new string[] { "value1", "value2" };
+            var companies = await _companyService.ListAll();
+            return companies;
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
-            _companyService.AddCompany(new Company() {Id = Guid.NewGuid(), Name = "holaaa"});
             return "value";
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public Task Post([FromBody]string name)
         {
+            return _companyService.AddCompany(new Company() { Id = Guid.NewGuid(), Name = name });
         }
 
         // PUT api/values/5

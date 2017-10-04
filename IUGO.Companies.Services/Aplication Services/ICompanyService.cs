@@ -19,6 +19,7 @@ namespace IUGO.Companies.Services.Aplication_Services
     public interface ICompanyService : IService
     {
         Task AddCompany(DTOs.Company company);
+        Task<IEnumerable<DTOs.Company>> ListAll();
     }
 
     public class CompanyServiceSf : StatefulService, ICompanyService
@@ -58,6 +59,13 @@ namespace IUGO.Companies.Services.Aplication_Services
             var domainCompany = new Company() { Id = company.Id, Name = company.Name };
             var repo = await _unitOfWork.CompanyRepository;
             var newCompany = await repo.Create(domainCompany);
+        }
+
+        public async Task<IEnumerable<DTOs.Company>> ListAll()
+        {
+            var repo = await _unitOfWork.CompanyRepository;
+            var companies = await repo.List();
+            return companies.Select(company => new DTOs.Company() {Id = company.Id, Name = company.Name});
         }
     }
 }

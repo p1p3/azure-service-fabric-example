@@ -53,7 +53,7 @@ namespace IUGO.Companies.API
         public static ICompanyService CreateCompanyService()
         {
             return ServiceProxy.Create<ICompanyService>(
-                new Uri("fabric:/IUGOsf/CompanyServiceSf"),
+                new Uri("fabric:/IUGOsf/IUGO.Companies.Services"),
                 new ServicePartitionKey(0));
         }
     }
