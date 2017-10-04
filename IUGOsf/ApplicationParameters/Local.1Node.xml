@@ -4,12 +4,6 @@
     <Parameter Name="IUGO.Companies.Services_PartitionCount" Value="1" />
     <Parameter Name="IUGO.Companies.Services_MinReplicaSetSize" Value="1" />
     <Parameter Name="IUGO.Companies.Services_TargetReplicaSetSize" Value="1" />
-    <Parameter Name="IUGO.Companies.Services_PartitionCount" Value="1" />
-    <Parameter Name="IUGO.Companies.Services_MinReplicaSetSize" Value="1" />
-    <Parameter Name="IUGO.Companies.Services_TargetReplicaSetSize" Value="1" />
-    <Parameter Name="IUGO.Companies.API_InstanceCount" Value="1" />
-    <Parameter Name="IUGO.Companies.API_InstanceCount" Value="1" />
-    <Parameter Name="IUGO.Companies.API_InstanceCount" Value="1" />
     <Parameter Name="IUGO.Companies.API_InstanceCount" Value="1" />
   </Parameters>
 </Application>

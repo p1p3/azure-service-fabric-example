@@ -1,37 +1,26 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using IUGO.Companies.Core;
-using IUGO.Companies.Core.Repositories;
 using IUGO.Companies.Infrastructure.Data;
 using IUGO.Companies.Infrastructure.Data.ServiceFabricStorage;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
-using Microsoft.ServiceFabric.Services.Remoting;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 
-namespace IUGO.Companies.Services.Aplication_Services
+namespace IUGO.Companies.Services
 {
-    public interface ICompanyService : IService
+    internal class CompanyServiceSf : StatefulService, ICompanyService
     {
-        Task AddCompany(DTOs.Company company);
-        Task<IEnumerable<DTOs.Company>> ListAll();
-    }
-
-    public class CompanyServiceSf : StatefulService, ICompanyService
-    {
-        private IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private CancellationToken _cancellationToken;
 
         /// <inheritdoc />
         protected override Task RunAsync(CancellationToken cancellationToken)
         {
             _cancellationToken = cancellationToken;
-            _unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager);
             return Task.CompletedTask;
         }
 
@@ -46,14 +35,10 @@ namespace IUGO.Companies.Services.Aplication_Services
 
         public CompanyServiceSf(StatefulServiceContext serviceContext) : base(serviceContext)
         {
-            //_unitOfWork = unitOfWork;
+            _unitOfWork =  new UnitOfWorkReliableStateManager(this.StateManager); ;
         }
 
-        //public CompanyServiceSf(StatefulServiceContext serviceContext, IUnitOfWork unitOfWork) : base(serviceContext)
-        //{
-        //    _unitOfWork = unitOfWork;
-        //}
-
+ 
         public async Task AddCompany(DTOs.Company company)
         {
             var domainCompany = new Company() { Id = company.Id, Name = company.Name };

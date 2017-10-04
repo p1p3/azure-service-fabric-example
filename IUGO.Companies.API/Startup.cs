@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IUGO.Companies.Services.Aplication_Services;
+using IUGO.Companies.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -52,8 +52,10 @@ namespace IUGO.Companies.API
 
         public static ICompanyService CreateCompanyService()
         {
+            var uri = "fabric:/IUGOsf/IUGO.Companies.Services";
+
             return ServiceProxy.Create<ICompanyService>(
-                new Uri("fabric:/IUGOsf/IUGO.Companies.Services"),
+                new Uri(uri),
                 new ServicePartitionKey(0));
         }
     }

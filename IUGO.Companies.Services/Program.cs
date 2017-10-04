@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using IUGO.Companies.Infrastructure.Data.ServiceFabricStorage;
-using IUGO.Companies.Services.Aplication_Services;
 using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace IUGO.Companies.Services

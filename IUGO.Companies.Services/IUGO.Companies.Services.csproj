@@ -85,7 +85,8 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aplication Services\ICompanyService.cs" />
+    <Compile Include="CompanyServiceSf.cs" />
+    <Compile Include="ICompanyService.cs" />
     <Compile Include="DTOs\Company.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services.cs" />

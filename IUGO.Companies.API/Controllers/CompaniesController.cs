@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IUGO.Companies.Services.Aplication_Services;
+using IUGO.Companies.Services;
 using IUGO.Companies.Services.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.ServiceFabric.Services.Client;
