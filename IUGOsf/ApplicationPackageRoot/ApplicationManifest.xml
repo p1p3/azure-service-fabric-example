@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="IUGOsfType" ApplicationTypeVersion="1.0.1" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
+    <Parameter Name="IUGO.Vehicles.API_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="IUGO.Vehicles.Services_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="IUGO.Vehicles.Services_PartitionCount" DefaultValue="1" />
+    <Parameter Name="IUGO.Vehicles.Services_TargetReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="IUGO.Drivers.API_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="IUGO.Drivers.Services_MinReplicaSetSize" DefaultValue="3" />
+    <Parameter Name="IUGO.Drivers.Services_PartitionCount" DefaultValue="1" />
+    <Parameter Name="IUGO.Drivers.Services_TargetReplicaSetSize" DefaultValue="3" />
     <Parameter Name="IUGO.Turns.API_InstanceCount" DefaultValue="-1" />
     <Parameter Name="IUGO.Turns.Services_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="IUGO.Turns.Services_PartitionCount" DefaultValue="1" />
@@ -13,6 +21,22 @@
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
        ServiceManifest.xml file. -->
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="IUGO.Vehicles.APIPkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="IUGO.Vehicles.ServicesPkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="IUGO.Drivers.APIPkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
+  <ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="IUGO.Drivers.ServicesPkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>
   <ServiceManifestImport>
     <ServiceManifestRef ServiceManifestName="IUGO.Turns.APIPkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
@@ -35,6 +59,26 @@
          ServiceFabric PowerShell module.
          
          The attribute ServiceTypeName below must match the name defined in the imported ServiceManifest.xml file. -->
+    <Service Name="IUGO.Vehicles.API" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="IUGO.Vehicles.APIType" InstanceCount="[IUGO.Vehicles.API_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+    <Service Name="IUGO.Vehicles.Services">
+      <StatefulService ServiceTypeName="IUGO.Vehicles.ServicesType" TargetReplicaSetSize="[IUGO.Vehicles.Services_TargetReplicaSetSize]" MinReplicaSetSize="[IUGO.Vehicles.Services_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[IUGO.Vehicles.Services_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+      </StatefulService>
+    </Service>
+    <Service Name="IUGO.Drivers.API" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="IUGO.Drivers.APIType" InstanceCount="[IUGO.Drivers.API_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>
+    <Service Name="IUGO.Drivers.Services">
+      <StatefulService ServiceTypeName="IUGO.Drivers.ServicesType" TargetReplicaSetSize="[IUGO.Drivers.Services_TargetReplicaSetSize]" MinReplicaSetSize="[IUGO.Drivers.Services_MinReplicaSetSize]">
+        <UniformInt64Partition PartitionCount="[IUGO.Drivers.Services_PartitionCount]" LowKey="-9223372036854775808" HighKey="9223372036854775807" />
+      </StatefulService>
+    </Service>
     <Service Name="IUGO.Turns.API" ServicePackageActivationMode="ExclusiveProcess">
       <StatelessService ServiceTypeName="IUGO.Turns.APIType" InstanceCount="[IUGO.Turns.API_InstanceCount]">
         <SingletonPartition />

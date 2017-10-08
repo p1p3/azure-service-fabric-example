@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IUGO.Turns.Services.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.ServiceFabric.Services.Client;
-using Microsoft.ServiceFabric.Services.Remoting.Client;
 
-namespace IUGO.Turns.API
+namespace IUGO.Drivers.API
 {
     public class Startup
     {
@@ -27,7 +24,6 @@ namespace IUGO.Turns.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddCompanyServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,23 +35,6 @@ namespace IUGO.Turns.API
             }
 
             app.UseMvc();
-        }
-    }
-
-    public static class ServiceFactory
-    {
-        public static void AddCompanyServices(this IServiceCollection services)
-        {
-            services.AddTransient<ITurnService>(provider => CreateTurnService());
-        }
-
-        public static ITurnService CreateTurnService()
-        {
-            var uri = "fabric:/IUGOsf/IUGO.Turns.Services";
-
-            return ServiceProxy.Create<ITurnService>(
-                new Uri(uri),
-                new ServicePartitionKey(0));
         }
     }
 }
