@@ -19,6 +19,7 @@ namespace IUGO.Turns.Integration.Handlers
         {
             log.WriteLine(message);
             var turnService = CreateTurnService();
+
         }
 
 
