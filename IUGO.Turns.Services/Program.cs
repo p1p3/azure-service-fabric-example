@@ -2,11 +2,9 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using IUGO.Companies.Infrastructure.Data.ServiceFabricStorage;
-using IUGO.Turns.Services;
 using Microsoft.ServiceFabric.Services.Runtime;
 
-namespace IUGO.Companies.Services
+namespace IUGO.Turns.Services
 {
     internal static class Program
     {
@@ -22,11 +20,8 @@ namespace IUGO.Companies.Services
                 // When Service Fabric creates an instance of this service type,
                 // an instance of the class is created in this host process.
 
-                //ServiceRuntime.RegisterServiceAsync("IUGO.Companies.ServicesType",
-                //    context => new Services(context)).GetAwaiter().GetResult();
-
-                ServiceRuntime.RegisterServiceAsync("IUGO.Companies.ServicesType",
-                    context => new CompanyServiceSf(context)).GetAwaiter().GetResult();
+                ServiceRuntime.RegisterServiceAsync("IUGO.Turns.ServicesType",
+                    context => new TurnServices(context)).GetAwaiter().GetResult();
 
                 ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(TurnServices).Name);
 

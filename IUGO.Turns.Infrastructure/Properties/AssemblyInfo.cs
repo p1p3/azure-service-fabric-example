@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("IUGO.Companies.Core")]
+[assembly: AssemblyTitle("IUGO.Turns.Infrastructure")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("IUGO.Companies.Core")]
+[assembly: AssemblyProduct("IUGO.Turns.Infrastructure")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("74bddba4-2e17-4807-a9bc-6c1465c6baf4")]
+[assembly: Guid("e55813d4-67a4-4d89-b266-c80b2ea05258")]
 
 // Version information for an assembly consists of the following four values:
 //

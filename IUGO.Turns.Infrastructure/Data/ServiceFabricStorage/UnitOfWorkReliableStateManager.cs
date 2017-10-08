@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using IUGO.Companies.Core;
-using IUGO.Companies.Core.Repositories;
+using IUGO.Turns.Core;
+using IUGO.Turns.Core.TurnAggreate;
 using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.Data.Collections;
 
-namespace IUGO.Companies.Infrastructure.Data.ServiceFabricStorage
+namespace IUGO.Turns.Infrastructure.Data.ServiceFabricStorage
 {
     public class UnitOfWorkReliableStateManager : IUnitOfWork
     {
@@ -18,7 +18,7 @@ namespace IUGO.Companies.Infrastructure.Data.ServiceFabricStorage
             _transaction = stateManager.CreateTransaction();
         }
 
-        public Task<ICompanyRepository> CompanyRepository => this.CreateCompanyRepository();
+        public Task<ITurnRepository> TurnsRepository => this.CreateTurnsRepository();
 
         public async Task Commit()
         {
@@ -28,10 +28,10 @@ namespace IUGO.Companies.Infrastructure.Data.ServiceFabricStorage
             _transaction = _stateManager.CreateTransaction();
         }
 
-        private async Task<ICompanyRepository> CreateCompanyRepository()
+        private async Task<ITurnRepository> CreateTurnsRepository()
         {
-            var companyStorage = await _stateManager.GetOrAddAsync<IReliableDictionary<Guid, Company>>("companies");
-            return new CompanyRepositoryReliableStateManager(companyStorage, _transaction);
+            var turnsStorage = await _stateManager.GetOrAddAsync<IReliableDictionary<Guid, DTOs.Turn>>("turns");
+            return new TurnRepositoryReliableStateManager(turnsStorage, _transaction);
         }
 
         public void Dispose()

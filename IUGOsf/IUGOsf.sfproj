@@ -34,6 +34,8 @@
   <ItemGroup>
     <ProjectReference Include="..\IUGO.Companies.API\IUGO.Companies.API.csproj" />
     <ProjectReference Include="..\IUGO.Companies.Services\IUGO.Companies.Services.csproj" />
+    <ProjectReference Include="..\IUGO.Turns.API\IUGO.Turns.API.csproj" />
+    <ProjectReference Include="..\IUGO.Turns.Services\IUGO.Turns.Services.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
   <PropertyGroup>
