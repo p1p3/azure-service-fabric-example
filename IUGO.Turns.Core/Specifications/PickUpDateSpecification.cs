@@ -15,7 +15,7 @@ namespace IUGO.Turns.Core.Specifications
 
         public override bool IsSatisfiedBy(Turn o)
         {
-            return o.AvailableFrom < _pickUpdate;
+            return o.AvailableFrom <= _pickUpdate;
         }
     }
 }

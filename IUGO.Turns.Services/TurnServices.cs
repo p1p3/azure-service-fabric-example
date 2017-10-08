@@ -56,13 +56,20 @@ namespace IUGO.Turns.Services
 
         public async Task<OutputTurnModel> CreateTurn(TurnInputModel turnInputModel)
         {
+            var repo = await _unitOfWork.TurnsRepository;
             var turn = new Turn(turnInputModel.AvailableFrom
                 , turnInputModel.DriverId
                 , turnInputModel.VehicleId);
 
-            var repo = await _unitOfWork.TurnsRepository;
-            await repo.AddTurn(turn);
+            var driverSpecification = new DriverSpecification(turn.DriverId);
+            var driverIsAlreadyInTurn = (await repo.ListBySpecification(driverSpecification)).Any();
+            if (driverIsAlreadyInTurn) throw new Exception("Driver is already in the queue");
 
+            var vehicleSpecification = new VehicleSpecification(turn.VehicleId);
+            var vehicleIsAlreadyInTurn = (await repo.ListBySpecification(vehicleSpecification)).Any();
+            if (vehicleIsAlreadyInTurn) throw new Exception("Vehicle is already in the queue");
+
+            await repo.AddTurn(turn);
             await _unitOfWork.Commit();
 
             return turn.MapToOutputTurnModel();

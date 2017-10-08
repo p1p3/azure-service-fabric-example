@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using IUGO.Turns.API.Models;
 using IUGO.Turns.Services.Interface;
 using IUGO.Turns.Services.Interface.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -18,9 +19,9 @@ namespace IUGO.Turns.API.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public Task<IEnumerable<OutputTurnModel>> Get([FromQuery] string destinationId, [FromQuery] string originId, [FromQuery] DateTime pickUpDate)
         {
-            return new string[] { "value1", "value2" };
+            return _turnsService.FindTurnsBy(new[] { destinationId }, new[] { originId }, pickUpDate);
         }
 
         // GET api/values/5
