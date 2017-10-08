@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Fabric;
 using System.Linq;
@@ -14,12 +15,13 @@ namespace IUGO.Companies.Services
 {
     internal class CompanyServiceSf : StatefulService, ICompanyService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private IUnitOfWork _unitOfWork;
         private CancellationToken _cancellationToken;
 
         /// <inheritdoc />
         protected override Task RunAsync(CancellationToken cancellationToken)
         {
+            _unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager);
             _cancellationToken = cancellationToken;
             return Task.CompletedTask;
         }
@@ -35,22 +37,23 @@ namespace IUGO.Companies.Services
 
         public CompanyServiceSf(StatefulServiceContext serviceContext) : base(serviceContext)
         {
-            _unitOfWork =  new UnitOfWorkReliableStateManager(this.StateManager); ;
+
         }
 
- 
+
         public async Task AddCompany(DTOs.Company company)
         {
             var domainCompany = new Company() { Id = company.Id, Name = company.Name };
             var repo = await _unitOfWork.CompanyRepository;
-            var newCompany = await repo.Create(domainCompany);
+            await repo.Create(domainCompany);
+            await _unitOfWork.Commit();
         }
 
         public async Task<IEnumerable<DTOs.Company>> ListAll()
         {
             var repo = await _unitOfWork.CompanyRepository;
             var companies = await repo.List();
-            return companies.Select(company => new DTOs.Company() {Id = company.Id, Name = company.Name});
+            return companies.Select(company => new DTOs.Company() { Id = company.Id, Name = company.Name });
         }
     }
 }

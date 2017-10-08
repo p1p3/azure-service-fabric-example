@@ -10,8 +10,8 @@ namespace IUGO.Companies.Infrastructure.Data.ServiceFabricStorage
     public class UnitOfWorkReliableStateManager : IUnitOfWork
     {
         private readonly IReliableStateManager _stateManager;
-        private readonly ITransaction _transaction;
-        private Task<ICompanyRepository> _companyRepository;
+        private ITransaction _transaction;
+
 
         public UnitOfWorkReliableStateManager(IReliableStateManager stateManager)
         {
@@ -19,22 +19,17 @@ namespace IUGO.Companies.Infrastructure.Data.ServiceFabricStorage
             _transaction = stateManager.CreateTransaction();
         }
 
-        public Task<ICompanyRepository> CompanyRepository => this._companyRepository ?? (this._companyRepository = this.CreateCompanyRepository());
+        public Task<ICompanyRepository> CompanyRepository => this.CreateCompanyRepository();
 
-        public Task Commit()
+        public async Task Commit()
         {
-            try
-            {
-                return this._transaction.CommitAsync();
-            }
-            catch (Exception)
-            {
-                this._transaction.Abort();
-                throw;
-            }
-           
+            await this._transaction.CommitAsync();
+            this._transaction.Dispose();
+
+
+            _transaction = _stateManager.CreateTransaction();
         }
-        
+
         private async Task<ICompanyRepository> CreateCompanyRepository()
         {
             var companyStorage = await _stateManager.GetOrAddAsync<IReliableDictionary<Guid, Company>>("companies");

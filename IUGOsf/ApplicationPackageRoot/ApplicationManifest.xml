@@ -4,7 +4,7 @@
     <Parameter Name="IUGO.Companies.Services_PartitionCount" DefaultValue="1" />
     <Parameter Name="IUGO.Companies.Services_TargetReplicaSetSize" DefaultValue="3" />
     <Parameter Name="IUGO.Companies.Services_MinReplicaSetSize" DefaultValue="3" />
-    <Parameter Name="IUGO.Companies.API_InstanceCount" DefaultValue="-1" />
+    <Parameter Name="IUGO.Companies.API_InstanceCount" DefaultValue="1" />
   </Parameters>
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
@@ -14,7 +14,7 @@
     <ConfigOverrides />
   </ServiceManifestImport>
   <ServiceManifestImport>
-    <ServiceManifestRef ServiceManifestName="IUGO.Companies.APIPkg" ServiceManifestVersion="1.0.0" />
+    <ServiceManifestRef ServiceManifestName="IUGO.Companies.APIPkg" ServiceManifestVersion="1.0.1" />
     <ConfigOverrides />
   </ServiceManifestImport>
   <DefaultServices>
