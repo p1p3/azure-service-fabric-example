@@ -46,10 +46,10 @@ namespace IUGO.Vehicles.API
     {
         public static void AddVehiclesServices(this IServiceCollection services)
         {
-            services.AddTransient<IVehiclesServices>(provider => CreateCompanyService());
+            services.AddTransient<IVehiclesServices>(provider => CreateVehicleService());
         }
 
-        public static IVehiclesServices CreateCompanyService()
+        public static IVehiclesServices CreateVehicleService()
         {
             var uri = "fabric:/IUGOsf/IUGO.Vehicles.Services";
 

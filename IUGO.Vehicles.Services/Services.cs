@@ -6,6 +6,7 @@ using IUGO.Vehicles.Services.Interfaces;
 using IUGO.Vehicles.Services.Interfaces.Models;
 using Microsoft.ServiceFabric.Data.Collections;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
+using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace IUGO.Vehicles.Services
@@ -30,7 +31,10 @@ namespace IUGO.Vehicles.Services
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()
         {
-            return new ServiceReplicaListener[0];
+            return new[]
+            {
+                new ServiceReplicaListener(this.CreateServiceRemotingListener)
+            };
         }
 
         /// <summary>

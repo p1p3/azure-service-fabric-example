@@ -110,6 +110,10 @@
       <Project>{053fe113-7c5c-4822-89bc-bdb0197ae62a}</Project>
       <Name>IUGO.Turns.Services.Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\IUGO.Vehicles.Services.Interfaces\IUGO.Vehicles.Services.Interfaces.csproj">
+      <Project>{01d92adf-921e-4245-a38e-6e0bafcafe18}</Project>
+      <Name>IUGO.Vehicles.Services.Interfaces</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

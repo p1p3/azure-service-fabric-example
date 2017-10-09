@@ -11,9 +11,8 @@ using IUGO.Turns.Infrastructure.Data.ServiceFabricStorage;
 using IUGO.Turns.Services.Interface;
 using IUGO.Turns.Services.Interface.Models;
 using IUGO.Turns.Services.Mappers;
-using Microsoft.ServiceFabric.Data;
+using IUGO.Vehicles.Services.Interfaces;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
-using Microsoft.ServiceFabric.Services.Remoting;
 using Microsoft.ServiceFabric.Services.Remoting.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 
@@ -23,6 +22,7 @@ namespace IUGO.Turns.Services
     {
         private IUnitOfWork _unitOfWork;
         private CancellationToken _cancellationToken;
+        private readonly IVehiclesServices _vehicleService;
 
         /// <inheritdoc />
         protected override Task RunAsync(CancellationToken cancellationToken)
@@ -41,8 +41,9 @@ namespace IUGO.Turns.Services
             };
         }
 
-        public TurnServices(StatefulServiceContext serviceContext) : base(serviceContext)
+        public TurnServices(StatefulServiceContext serviceContext, IVehiclesServices vehicleService) : base(serviceContext)
         {
+            this._vehicleService = vehicleService;
         }
 
         public async Task<OutputTurnModel> FindTurn(Guid id)
@@ -57,6 +58,9 @@ namespace IUGO.Turns.Services
         public async Task<OutputTurnModel> CreateTurn(TurnInputModel turnInputModel)
         {
             var repo = await _unitOfWork.TurnsRepository;
+
+            var vehicle = await _vehicleService.FindVehicle(turnInputModel.VehicleId);
+
             var turn = new Turn(turnInputModel.AvailableFrom
                 , turnInputModel.DriverId
                 , turnInputModel.VehicleId);

@@ -2,6 +2,9 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using IUGO.Vehicles.Services.Interfaces;
+using Microsoft.ServiceFabric.Services.Client;
+using Microsoft.ServiceFabric.Services.Remoting.Client;
 using Microsoft.ServiceFabric.Services.Runtime;
 
 namespace IUGO.Turns.Services
@@ -21,7 +24,7 @@ namespace IUGO.Turns.Services
                 // an instance of the class is created in this host process.
 
                 ServiceRuntime.RegisterServiceAsync("IUGO.Turns.ServicesType",
-                    context => new TurnServices(context)).GetAwaiter().GetResult();
+                    context => new TurnServices(context, CreateVehicleService())).GetAwaiter().GetResult();
 
                 ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(TurnServices).Name);
 
@@ -34,5 +37,17 @@ namespace IUGO.Turns.Services
                 throw;
             }
         }
+
+
+        private static IVehiclesServices CreateVehicleService()
+        {
+            var uri = "fabric:/IUGOsf/IUGO.Vehicles.Services";
+
+            return ServiceProxy.Create<IVehiclesServices>(
+                new Uri(uri),
+                new ServicePartitionKey(0));
+        }
     }
+
+
 }
