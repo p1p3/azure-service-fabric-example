@@ -82,6 +82,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Integration\TurnAssignedMessage.cs" />
     <Compile Include="ITurnService.cs" />
     <Compile Include="Models\TurnInputModel.cs" />
     <Compile Include="Models\OutputTurnModel.cs" />

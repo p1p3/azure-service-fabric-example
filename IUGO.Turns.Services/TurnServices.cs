@@ -4,11 +4,14 @@ using System.Fabric;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using IUGO.Turns.Core.Events;
 using IUGO.Turns.Core.Specifications;
 using IUGO.Turns.Core.TurnAggreate;
 using IUGO.Turns.Infrastructure.Data;
 using IUGO.Turns.Infrastructure.Data.ServiceFabricStorage;
+using IUGO.Turns.Infrastructure.Integration;
 using IUGO.Turns.Services.Interface;
+using IUGO.Turns.Services.Interface.Integration;
 using IUGO.Turns.Services.Interface.Models;
 using IUGO.Turns.Services.Mappers;
 using IUGO.Vehicles.Services.Interfaces;
@@ -23,6 +26,7 @@ namespace IUGO.Turns.Services
         private IUnitOfWork _unitOfWork;
         private CancellationToken _cancellationToken;
         private readonly IVehiclesServices _vehicleService;
+      
 
         /// <inheritdoc />
         protected override Task RunAsync(CancellationToken cancellationToken)
@@ -123,7 +127,22 @@ namespace IUGO.Turns.Services
             var outputTurns = availableTurns.Select(turn => turn.MapToOutputTurnModel());
 
             return outputTurns;
+        }
 
+        public async Task AssignTurnToShippingService(Guid turnId, string shippingServiceId)
+        {
+            var repo = await _unitOfWork.TurnsRepository;
+            var turn = await repo.FindTurn(turnId);
+
+            var message = new TurnAssignedMessage()
+            {
+                DriverId = turn.DriverId,
+                VehicleId = turn.VehicleId,
+                ShippingServiceId = shippingServiceId
+            };
+
+            var notification = new TurnAssignedEvent(message,"v1");
+            await notification.Notify();
         }
     }
 }

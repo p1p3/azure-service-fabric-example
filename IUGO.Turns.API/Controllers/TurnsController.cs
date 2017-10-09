@@ -44,5 +44,13 @@ namespace IUGO.Turns.API.Controllers
         {
             return _turnsService.DeleteTurn(Guid.Parse(id));
         }
+
+        // POST api/values
+        [HttpPut("{id}")]
+        public Task Post(string id, [FromBody]string shippingServiceId)
+        {
+            return _turnsService.AssignTurnToShippingService(Guid.Parse(id), shippingServiceId);
+        }
+
     }
 }

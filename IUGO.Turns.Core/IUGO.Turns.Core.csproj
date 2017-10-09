@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\IIntegrationEvent.cs" />
+    <Compile Include="Events\ITurnAssignedEvent.cs" />
     <Compile Include="Specifications\common\AllSpecification.cs" />
     <Compile Include="Specifications\common\AndSpecification.cs" />
     <Compile Include="Specifications\common\CompositeSpecification.cs" />

@@ -18,5 +18,7 @@ namespace IUGO.Turns.Services.Interface
 
         Task<IEnumerable<OutputTurnModel>> FindTurnsBy(IEnumerable<string> destinationIds,
             IEnumerable<string> originIds, DateTime pickUpDate);
+
+        Task AssignTurnToShippingService(Guid turnId, string shippingServiceId);
     }
 }
