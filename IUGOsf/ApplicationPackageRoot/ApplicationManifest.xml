@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="IUGOsfType" ApplicationTypeVersion="1.0.1" xmlns="http://schemas.microsoft.com/2011/01/fabric">
+<ApplicationManifest xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="IUGOsfType" ApplicationTypeVersion="1.0.0" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
+    <!--<Parameter Name="IUGO.Shipping.Integration.Test_InstanceCount" DefaultValue="-1" />-->
     <Parameter Name="IUGO.Shipping.Integration.TurnAssigned_InstanceCount" DefaultValue="-1" />
     <Parameter Name="IUGO.Vehicles.API_InstanceCount" DefaultValue="-1" />
     <Parameter Name="IUGO.Vehicles.Services_MinReplicaSetSize" DefaultValue="3" />
@@ -19,6 +20,10 @@
     <Parameter Name="IUGO.Companies.Services_MinReplicaSetSize" DefaultValue="3" />
     <Parameter Name="IUGO.Companies.API_InstanceCount" DefaultValue="1" />
   </Parameters>
+  <!--<ServiceManifestImport>
+    <ServiceManifestRef ServiceManifestName="IUGO.Shipping.Integration.TestPkg" ServiceManifestVersion="1.0.0" />
+    <ConfigOverrides />
+  </ServiceManifestImport>-->
   <!-- Import the ServiceManifest from the ServicePackage. The ServiceManifestName and ServiceManifestVersion 
        should match the Name and Version attributes of the ServiceManifest element defined in the 
        ServiceManifest.xml file. -->
@@ -55,10 +60,15 @@
     <ConfigOverrides />
   </ServiceManifestImport>
   <ServiceManifestImport>
-    <ServiceManifestRef ServiceManifestName="IUGO.Companies.APIPkg" ServiceManifestVersion="1.0.1" />
+    <ServiceManifestRef ServiceManifestName="IUGO.Companies.APIPkg" ServiceManifestVersion="1.0.0" />
     <ConfigOverrides />
   </ServiceManifestImport>
   <DefaultServices>
+    <!--<Service Name="IUGO.Shipping.Integration.Test" ServicePackageActivationMode="ExclusiveProcess">
+      <StatelessService ServiceTypeName="IUGO.Shipping.Integration.TestType" InstanceCount="[IUGO.Shipping.Integration.Test_InstanceCount]">
+        <SingletonPartition />
+      </StatelessService>
+    </Service>-->
     <!-- The section below creates instances of service types, when an instance of this 
          application type is created. You can also create one or more instances of service type using the 
          ServiceFabric PowerShell module.

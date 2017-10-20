@@ -91,5 +91,11 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IUGO.EventBus\IUGO.EventBus.csproj">
+      <Project>{c6de7b58-3f28-45f6-a9a1-9e582cce1a28}</Project>
+      <Name>IUGO.EventBus</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

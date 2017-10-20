@@ -98,6 +98,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IUGO.EventBus\IUGO.EventBus.csproj">
+      <Project>{c6de7b58-3f28-45f6-a9a1-9e582cce1a28}</Project>
+      <Name>IUGO.EventBus</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IUGO.Turns.Core\IUGO.Turns.Core.csproj">
       <Project>{774bacb7-b650-4f31-a980-0096c59ff3ac}</Project>
       <Name>IUGO.Turns.Core</Name>
@@ -114,6 +118,9 @@
       <Project>{01d92adf-921e-4245-a38e-6e0bafcafe18}</Project>
       <Name>IUGO.Vehicles.Services.Interfaces</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

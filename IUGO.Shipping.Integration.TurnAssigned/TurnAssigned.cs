@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Fabric;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using IUGO.Shipping.Integration.TurnAssigned;
+using IUGO.Turns.Services.Interface.Integration;
+using Microsoft.Azure;
 using Microsoft.ServiceBus.Messaging;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using Newtonsoft.Json;
 using ServiceFabric.ServiceBus.Services;
 using ServiceFabric.ServiceBus.Services.CommunicationListeners;
 
@@ -32,23 +36,40 @@ namespace IUGO.Shipping.Integration.TurnAssigned
             // In the configuration file, define connection strings: 
             // "Microsoft.ServiceBus.ConnectionString.Receive"
             // and "Microsoft.ServiceBus.ConnectionString.Send"
-
-            // Also, define a QueueName:
-            string serviceBusQueueName = "test"; //using entity path.
-            //alternative: CloudConfigurationManager.GetSetting("QueueName");
+            // Also, define Topic & Subscription Names:
+            string serviceBusTopicName = "turn-assigned"; //CloudConfigurationManager.GetSetting("TopicName");
+            string serviceBusSubscriptionName = "shipping-turn-assigned";
             Action<string> logAction = log => ServiceEventSource.Current.ServiceMessage(base.Context, log);
-            yield return new ServiceInstanceListener(context => new ServiceBusQueueCommunicationListener(
+
+            yield return new ServiceInstanceListener(context => new ServiceBusSubscriptionCommunicationListener(
                 new Handler(logAction)
                 , context
-                , serviceBusQueueName
+                , serviceBusTopicName
+                , serviceBusSubscriptionName
                 , requireSessions: false)
             {
-                AutoRenewTimeout =
-                    TimeSpan.FromSeconds(
-                        70), //auto renew up until 70s, so processing can take no longer than 60s (default lock duration).
-                LogAction = logAction,
-                MessagePrefetchCount = 10
-            }, "StatelessService-ServiceBusQueueListener");
+                LogAction = log => ServiceEventSource.Current.ServiceMessage(base.Context, log),
+                MessagePrefetchCount =  10
+
+            }, "StatelessService-ServiceBusSubscriptionListener");
+
+
+            //// Also, define a QueueName:
+            //string serviceBusQueueName = "test"; //using entity path.
+            ////alternative: CloudConfigurationManager.GetSetting("QueueName");
+            //Action<string> logAction = log => ServiceEventSource.Current.ServiceMessage(base.Context, log);
+            //yield return new ServiceInstanceListener(context => new ServiceBusSubscriptionCommunicationListener(
+            //    new Handler(logAction)
+            //    , context
+            //    , serviceBusQueueName
+            //    , requireSessions: false)
+            //{
+            //    AutoRenewTimeout =
+            //        TimeSpan.FromSeconds(
+            //            70), //auto renew up until 70s, so processing can take no longer than 60s (default lock duration).
+            //    LogAction = logAction,
+            //    MessagePrefetchCount = 10
+            //}, "StatelessService-ServiceBusQueueListener");
         }
 
         /// <summary>
@@ -87,7 +108,11 @@ namespace IUGO.Shipping.Integration.TurnAssigned
         {
             WriteLog(
                 $"Sleeping for 7s while processing queue message {message.MessageId} to test message lock renew function (send more than 9 messages!).");
-            Thread.Sleep(TimeSpan.FromSeconds(7));
+            //Thread.Sleep(TimeSpan.FromSeconds(7));
+           
+            //var messageData = Encoding.UTF8.GetString(message.GetBody<byte[]>());
+            var turnAssignedSerialized = message.GetBody<dynamic>();
+            //var turnAssigned = JsonConvert.DeserializeObject<TurnAssignedMessage>(messageData);
 
             WriteLog($"Handling queue message {message.MessageId}");
             return Task.FromResult(true);

@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using IUGO.Turns.Infrastructure.Integration;
+using IUGO.Turns.Services.Interface.Integration;
 using IUGO.Vehicles.Services.Interfaces;
 using Microsoft.ServiceFabric.Services.Client;
 using Microsoft.ServiceFabric.Services.Remoting.Client;
@@ -22,11 +24,18 @@ namespace IUGO.Turns.Services
                 // Registering a service maps a service type name to a .NET type.
                 // When Service Fabric creates an instance of this service type,
                 // an instance of the class is created in this host process.
+                var serviceName = typeof(TurnServices).Name;
+
+                var eventBus = ServiceBusFactory.CreateAzureEventBusInstance(
+                    "Endpoint=sb://fjaramillo.servicebus.windows.net/;SharedAccessKeyName=manage;SharedAccessKey=mVb/KgmcNz6VMhUf8u+UxXfA3RHusg/eafWcS5KYS18=;EntityPath=turn-assigned",
+                    serviceName);
+
+                var turnAssignedEventEmitter = new EventEmitter<TurnAssignedMessage>(eventBus);
 
                 ServiceRuntime.RegisterServiceAsync("IUGO.Turns.ServicesType",
-                    context => new TurnServices(context, CreateVehicleService())).GetAwaiter().GetResult();
+                    context => new TurnServices(context, CreateVehicleService(), turnAssignedEventEmitter)).GetAwaiter().GetResult();
 
-                ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(TurnServices).Name);
+                ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, serviceName);
 
                 // Prevents this host process from terminating so services keep running.
                 Thread.Sleep(Timeout.Infinite);

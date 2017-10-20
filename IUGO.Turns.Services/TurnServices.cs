@@ -4,7 +4,7 @@ using System.Fabric;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using IUGO.Turns.Core.Events;
+using IUGO.EventBus.Abstractions;
 using IUGO.Turns.Core.Specifications;
 using IUGO.Turns.Core.TurnAggreate;
 using IUGO.Turns.Infrastructure.Data;
@@ -26,7 +26,8 @@ namespace IUGO.Turns.Services
         private IUnitOfWork _unitOfWork;
         private CancellationToken _cancellationToken;
         private readonly IVehiclesServices _vehicleService;
-      
+        private readonly EventEmitter<TurnAssignedMessage> _turnAssignedEmitter;
+
 
         /// <inheritdoc />
         protected override Task RunAsync(CancellationToken cancellationToken)
@@ -45,9 +46,10 @@ namespace IUGO.Turns.Services
             };
         }
 
-        public TurnServices(StatefulServiceContext serviceContext, IVehiclesServices vehicleService) : base(serviceContext)
+        public TurnServices(StatefulServiceContext serviceContext, IVehiclesServices vehicleService, EventEmitter<TurnAssignedMessage> turnAssignedEmitter) : base(serviceContext)
         {
             this._vehicleService = vehicleService;
+            _turnAssignedEmitter = turnAssignedEmitter;
         }
 
         public async Task<OutputTurnModel> FindTurn(Guid id)
@@ -141,8 +143,9 @@ namespace IUGO.Turns.Services
                 ShippingServiceId = shippingServiceId
             };
 
-            var notification = new TurnAssignedEvent(message,"v1");
-            await notification.Notify();
+            _turnAssignedEmitter.Emit(message);
+            //var notification = new TurnAssignedEvent(message, "v1");
+            //await notification.Notify();
         }
     }
 }
