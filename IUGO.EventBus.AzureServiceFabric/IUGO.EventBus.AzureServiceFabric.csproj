@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ServiceFabric.ServiceBus.Services" Version="5.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IUGO.EventBus.AzureServiceBus\IUGO.EventBus.AzureServiceBus.csproj" />
+    <ProjectReference Include="..\IUGO.EventBus\IUGO.EventBus.csproj" />
+  </ItemGroup>
+
+  
+</Project>
+

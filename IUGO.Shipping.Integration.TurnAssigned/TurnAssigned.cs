@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.Fabric;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using IUGO.Shipping.Integration.TurnAssigned;
+using IUGO.EventBus.Abstractions;
+using IUGO.EventBus.AzureServiceBus;
+using IUGO.EventBus.AzureServiceFabric.ServiceListener;
+using IUGO.Shipping.Integration.TurnAssigned.Handlers;
 using IUGO.Turns.Services.Interface.Integration;
-using Microsoft.Azure;
-using Microsoft.ServiceBus.Messaging;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
-using Newtonsoft.Json;
-using ServiceFabric.ServiceBus.Services;
-using ServiceFabric.ServiceBus.Services.CommunicationListeners;
 
 namespace IUGO.Shipping.Integration.TurnAssigned
 {
@@ -24,8 +22,7 @@ namespace IUGO.Shipping.Integration.TurnAssigned
     {
         public TurnAssigned(StatelessServiceContext context)
             : base(context)
-        {
-        }
+        { }
 
         /// <summary>
         /// Optional override to create listeners (e.g., TCP, HTTP) for this service replica to handle client or user requests.
@@ -33,90 +30,32 @@ namespace IUGO.Shipping.Integration.TurnAssigned
         /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            // In the configuration file, define connection strings: 
-            // "Microsoft.ServiceBus.ConnectionString.Receive"
-            // and "Microsoft.ServiceBus.ConnectionString.Send"
-            // Also, define Topic & Subscription Names:
-            string serviceBusTopicName = "turn-assigned"; //CloudConfigurationManager.GetSetting("TopicName");
-            string serviceBusSubscriptionName = "shipping-turn-assigned";
-            Action<string> logAction = log => ServiceEventSource.Current.ServiceMessage(base.Context, log);
+            var eventBus = ServiceConfiguration.ConfigureEventBus(
+                "Endpoint=sb://fjaramillo.servicebus.windows.net/;SharedAccessKeyName=manage;SharedAccessKey=mVb/KgmcNz6VMhUf8u+UxXfA3RHusg/eafWcS5KYS18=;EntityPath=turn-assigned"
+                , "shipping-turn-assigned");
 
-            yield return new ServiceInstanceListener(context => new ServiceBusSubscriptionCommunicationListener(
-                new Handler(logAction)
-                , context
-                , serviceBusTopicName
-                , serviceBusSubscriptionName
-                , requireSessions: false)
+
+            return new[]
             {
-                LogAction = log => ServiceEventSource.Current.ServiceMessage(base.Context, log),
-                MessagePrefetchCount =  10
+                new ServiceInstanceListener(context => new ServiceBusEventBusListener<TurnAssignedMessageIntegrationEvent, AssignTurnToShippingHandler>(eventBus), "StatelessService-ServiceBusQueueListener")
+            };
 
-            }, "StatelessService-ServiceBusSubscriptionListener");
-
-
-            //// Also, define a QueueName:
-            //string serviceBusQueueName = "test"; //using entity path.
-            ////alternative: CloudConfigurationManager.GetSetting("QueueName");
-            //Action<string> logAction = log => ServiceEventSource.Current.ServiceMessage(base.Context, log);
-            //yield return new ServiceInstanceListener(context => new ServiceBusSubscriptionCommunicationListener(
-            //    new Handler(logAction)
-            //    , context
-            //    , serviceBusQueueName
-            //    , requireSessions: false)
-            //{
-            //    AutoRenewTimeout =
-            //        TimeSpan.FromSeconds(
-            //            70), //auto renew up until 70s, so processing can take no longer than 60s (default lock duration).
-            //    LogAction = logAction,
-            //    MessagePrefetchCount = 10
-            //}, "StatelessService-ServiceBusQueueListener");
         }
 
-        /// <summary>
-        /// This is the main entry point for your service instance.
-        /// </summary>
-        /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service instance.</param>
-        protected override async Task RunAsync(CancellationToken cancellationToken)
-        {
-            // TODO: Replace the following sample code with your own logic 
-            //       or remove this RunAsync override if it's not needed in your service.
 
-            long iterations = 0;
-
-            while (true)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
-
-                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
-            }
-        }
     }
 
-    internal sealed class Handler : AutoCompleteServiceBusMessageReceiver
+    internal class ServiceConfiguration
     {
-
-        public Handler(Action<string> logAction)
-            : base(logAction)
+        public static IEventBus ConfigureEventBus(string serviceBusConnectionString, string subscriptionClientName)
         {
+            IServiceCollection services = new ServiceCollection();
+            services.AddTransient<AssignTurnToShippingHandler>();
+            var provider = services.BuildServiceProvider();
+
+            var serviceResolver = new IntegrationHandlersProvider(provider);
+            var defaultPersister = new DefaultServiceBusPersisterConnection(serviceBusConnectionString);
+            return new EventBusServiceBus(defaultPersister, subscriptionClientName, serviceResolver);
         }
-
-
-        protected override Task ReceiveMessageImplAsync(BrokeredMessage message, MessageSession session,
-            CancellationToken cancellationToken)
-        {
-            WriteLog(
-                $"Sleeping for 7s while processing queue message {message.MessageId} to test message lock renew function (send more than 9 messages!).");
-            //Thread.Sleep(TimeSpan.FromSeconds(7));
-           
-            //var messageData = Encoding.UTF8.GetString(message.GetBody<byte[]>());
-            var turnAssignedSerialized = message.GetBody<dynamic>();
-            //var turnAssigned = JsonConvert.DeserializeObject<TurnAssignedMessage>(messageData);
-
-            WriteLog($"Handling queue message {message.MessageId}");
-            return Task.FromResult(true);
-        }
-
     }
 }

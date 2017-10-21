@@ -5,20 +5,20 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IUGO.Turns.Infrastructure.Integration
 {
-    public class IntegrationHandlersResolver : IServiceResolver
+    public class IntegrationHandlersProvider : IHandlerServiceProvider
     {
         private readonly IServiceProvider _servicesProvider;
 
-        public IntegrationHandlersResolver(IServiceProvider servicesProvider)
+        public IntegrationHandlersProvider(IServiceProvider servicesProvider)
         {
             this._servicesProvider = servicesProvider;
         }
         
-        public static IServiceResolver CreateDeafultHandlerResolver()
+        public static IHandlerServiceProvider CreateDeafultHandlerResolver()
         {
             IServiceCollection services = new ServiceCollection();
             var provider = services.BuildServiceProvider();
-            return new IntegrationHandlersResolver(provider);
+            return new IntegrationHandlersProvider(provider);
         }
 
 

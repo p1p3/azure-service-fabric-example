@@ -2,7 +2,7 @@
 
 namespace IUGO.Turns.Services.Interface.Integration
 {
-    public class TurnAssignedMessage : IntegrationEvent
+    public class TurnAssignedMessageIntegrationEvent : IntegrationEvent
     {
         public string DriverId { get; set; }
         public string VehicleId { get; set; }

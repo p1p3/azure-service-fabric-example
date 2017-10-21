@@ -26,7 +26,7 @@ namespace IUGO.Turns.Services
         private IUnitOfWork _unitOfWork;
         private CancellationToken _cancellationToken;
         private readonly IVehiclesServices _vehicleService;
-        private readonly EventEmitter<TurnAssignedMessage> _turnAssignedEmitter;
+        private readonly EventEmitter<TurnAssignedMessageIntegrationEvent> _turnAssignedEmitter;
 
 
         /// <inheritdoc />
@@ -46,7 +46,7 @@ namespace IUGO.Turns.Services
             };
         }
 
-        public TurnServices(StatefulServiceContext serviceContext, IVehiclesServices vehicleService, EventEmitter<TurnAssignedMessage> turnAssignedEmitter) : base(serviceContext)
+        public TurnServices(StatefulServiceContext serviceContext, IVehiclesServices vehicleService, EventEmitter<TurnAssignedMessageIntegrationEvent> turnAssignedEmitter) : base(serviceContext)
         {
             this._vehicleService = vehicleService;
             _turnAssignedEmitter = turnAssignedEmitter;
@@ -136,7 +136,7 @@ namespace IUGO.Turns.Services
             var repo = await _unitOfWork.TurnsRepository;
             var turn = await repo.FindTurn(turnId);
 
-            var message = new TurnAssignedMessage()
+            var message = new TurnAssignedMessageIntegrationEvent()
             {
                 DriverId = turn.DriverId,
                 VehicleId = turn.VehicleId,

@@ -1,13 +1,11 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using IUGO.EventBus;
 using IUGO.EventBus.Abstractions;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 
-namespace IUGO.Shipping.Integration.Test.ServiceListener
+namespace IUGO.EventBus.AzureServiceFabric.ServiceListener
 {
-    internal class ServiceBusEventBusListener<T, TH> : ICommunicationListener where T : IntegrationEvent
+    public class ServiceBusEventBusListener<T, TH> : ICommunicationListener where T : IntegrationEvent
         where TH : IIntegrationEventHandler<T>
     {
         private IEventBus _eventBus;
@@ -39,6 +37,7 @@ namespace IUGO.Shipping.Integration.Test.ServiceListener
         private void Stop()
         {
             _eventBus.Unsubscribe<T, TH>();
+            _eventBus.Dispose();
             _eventBus = null;
         }
     }

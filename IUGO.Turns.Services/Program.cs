@@ -30,7 +30,7 @@ namespace IUGO.Turns.Services
                     "Endpoint=sb://fjaramillo.servicebus.windows.net/;SharedAccessKeyName=manage;SharedAccessKey=mVb/KgmcNz6VMhUf8u+UxXfA3RHusg/eafWcS5KYS18=;EntityPath=turn-assigned",
                     serviceName);
 
-                var turnAssignedEventEmitter = new EventEmitter<TurnAssignedMessage>(eventBus);
+                var turnAssignedEventEmitter = new EventEmitter<TurnAssignedMessageIntegrationEvent>(eventBus);
 
                 ServiceRuntime.RegisterServiceAsync("IUGO.Turns.ServicesType",
                     context => new TurnServices(context, CreateVehicleService(), turnAssignedEventEmitter)).GetAwaiter().GetResult();

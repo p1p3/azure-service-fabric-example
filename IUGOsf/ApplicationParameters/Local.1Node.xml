@@ -2,6 +2,7 @@
 <Application xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="fabric:/IUGOsf" xmlns="http://schemas.microsoft.com/2011/01/fabric">
   <Parameters>
     <Parameter Name="IUGO.Shipping.Integration.TurnAssigned_InstanceCount" Value="1" />
+    <Parameter Name="IUGO.Shipping.Integration.TurnAssigned_InstanceCount" Value="1" />
     <Parameter Name="IUGO.Vehicles.API_InstanceCount" Value="1" />
     <Parameter Name="IUGO.Vehicles.Services_PartitionCount" Value="1" />
     <Parameter Name="IUGO.Vehicles.Services_MinReplicaSetSize" Value="1" />

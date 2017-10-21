@@ -8,7 +8,7 @@ namespace IUGO.Turns.Infrastructure.Integration
         public static IEventBus CreateAzureEventBusInstance(string serviceBusConnectionString, string subscriptionClientName)
         {
             var defaultPersister = new DefaultServiceBusPersisterConnection(serviceBusConnectionString);
-            return new EventBusServiceBus(defaultPersister, subscriptionClientName, IntegrationHandlersResolver.CreateDeafultHandlerResolver());
+            return new EventBusServiceBus(defaultPersister, subscriptionClientName, IntegrationHandlersProvider.CreateDeafultHandlerResolver());
         }
     }
 }

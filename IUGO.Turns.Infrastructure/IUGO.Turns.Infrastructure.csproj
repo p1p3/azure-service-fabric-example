@@ -97,7 +97,7 @@
     <Compile Include="Data\ServiceFabricStorage\TurnRepositoryReliableStateManager.cs" />
     <Compile Include="Data\ServiceFabricStorage\UnitOfWorkReliableStateManager.cs" />
     <Compile Include="Integration\EventEmitter.cs" />
-    <Compile Include="Integration\IntegrationHandlersResolver.cs" />
+    <Compile Include="Integration\IntegrationHandlersProvider.cs" />
     <Compile Include="Integration\ServiceBusFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

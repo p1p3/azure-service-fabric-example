@@ -20,13 +20,13 @@ namespace IUGO.EventBus.AzureServiceBus
         private readonly string AUTOFAC_SCOPE_NAME = "IUGO_event_bus";
 
         private const string INTEGRATION_EVENT_SUFIX = "IntegrationEvent";
-        private readonly IServiceResolver _serviceResolver;
+        private readonly IHandlerServiceProvider _handlerServiceProvider;
 
 
         public EventBusServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection,
-            IEventBusSubscriptionsManager subsManager, string subscriptionClientName, IServiceResolver serviceResolver)
+            IEventBusSubscriptionsManager subsManager, string subscriptionClientName, IHandlerServiceProvider handlerServiceProvider)
         {
-            _serviceResolver = serviceResolver;
+            _handlerServiceProvider = handlerServiceProvider;
             _serviceBusPersisterConnection = serviceBusPersisterConnection;
             _subsManager = subsManager;
 
@@ -41,7 +41,7 @@ namespace IUGO.EventBus.AzureServiceBus
         {
         }
 
-        public EventBusServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection, string subscriptionClientName, IServiceResolver sericeResolver) : this(serviceBusPersisterConnection, new InMemoryEventBusSubscriptionsManager(), subscriptionClientName, sericeResolver)
+        public EventBusServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection, string subscriptionClientName, IHandlerServiceProvider sericeProvider) : this(serviceBusPersisterConnection, new InMemoryEventBusSubscriptionsManager(), subscriptionClientName, sericeProvider)
         {
         }
 
@@ -143,31 +143,6 @@ namespace IUGO.EventBus.AzureServiceBus
 
         private async Task ProcessEvent(string eventName, string message)
         {
-            //if (_subsManager.HasSubscriptionsForEvent(eventName))
-            //{
-            //    using (var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME))
-            //    {
-            //        var subscriptions = _subsManager.GetHandlersForEvent(eventName);
-            //        foreach (var subscription in subscriptions)
-            //        {
-            //            if (subscription.IsDynamic)
-            //            {
-            //                var handler = scope.ResolveOptional(subscription.HandlerType) as IDynamicIntegrationEventHandler;
-            //                dynamic eventData = JObject.Parse(message);
-            //                await handler.Handle(eventData);
-            //            }
-            //            else
-            //            {
-            //                var eventType = _subsManager.GetEventTypeByName(eventName);
-            //                var integrationEvent = JsonConvert.DeserializeObject(message, eventType);
-            //                var handler = scope.ResolveOptional(subscription.HandlerType);
-            //                var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
-            //                await (Task)concreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
-            //            }
-            //        }
-            //    }
-            //}
-
             if (_subsManager.HasSubscriptionsForEvent(eventName))
             {
                 var subscriptions = _subsManager.GetHandlersForEvent(eventName);
@@ -175,8 +150,9 @@ namespace IUGO.EventBus.AzureServiceBus
                 {
                     var eventType = _subsManager.GetEventTypeByName(eventName);
                     var integrationEvent = JsonConvert.DeserializeObject(message, eventType);
-                    var handler = _serviceResolver.CreateInstance(subscription.HandlerType);
+                    var handler = _handlerServiceProvider.CreateInstance(subscription.HandlerType);
                     var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
+
                     await (Task)concreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
                 }
             }
