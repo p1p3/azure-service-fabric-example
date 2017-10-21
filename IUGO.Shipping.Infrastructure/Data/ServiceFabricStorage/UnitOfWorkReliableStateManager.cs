@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using IUGO.Turns.Core;
+using IUGO.Shipping.Core;
+using IUGO.Shipping.Core.ShippingAggregate;
 using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.Data.Collections;
 
-namespace IUGO.Turns.Infrastructure.Data.ServiceFabricStorage
+namespace IUGO.Shipping.Infrastructure.Data.ServiceFabricStorage
 {
     public class UnitOfWorkReliableStateManager : IUnitOfWork
     {
@@ -17,7 +18,7 @@ namespace IUGO.Turns.Infrastructure.Data.ServiceFabricStorage
             _transaction = stateManager.CreateTransaction();
         }
 
-        public Task<ITurnRepository> TurnsRepository => this.CreateTurnsRepository();
+        public Task<IShippingRepository> ShippingsRepository => this.CreateShippingsRepository();
 
         public async Task Commit()
         {
@@ -27,10 +28,10 @@ namespace IUGO.Turns.Infrastructure.Data.ServiceFabricStorage
             _transaction = _stateManager.CreateTransaction();
         }
 
-        private async Task<ITurnRepository> CreateTurnsRepository()
+        private async Task<IShippingRepository> CreateShippingsRepository()
         {
-            var turnsStorage = await _stateManager.GetOrAddAsync<IReliableDictionary<Guid, DTOs.Turn>>("turns");
-            return new TurnRepositoryReliableStateManager(turnsStorage, _transaction);
+            var shippingStorage = await _stateManager.GetOrAddAsync<IReliableDictionary<Guid, DTOs.Shipping>>("shippings");
+            return new ShippingRepositoryReliableStateManager(shippingStorage, _transaction);
         }
 
         public void Dispose()

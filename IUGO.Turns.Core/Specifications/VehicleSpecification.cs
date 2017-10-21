@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IUGO.Turns.Core.Specifications.common;
+﻿using IUGO.Domain.Specifications;
 using IUGO.Turns.Core.TurnAggreate;
 
 namespace IUGO.Turns.Core.Specifications

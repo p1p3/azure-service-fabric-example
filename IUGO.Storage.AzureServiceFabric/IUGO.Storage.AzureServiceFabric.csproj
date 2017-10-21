@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ServiceFabric.Data" Version="2.7.198" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IUGO.Domain\IUGO.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

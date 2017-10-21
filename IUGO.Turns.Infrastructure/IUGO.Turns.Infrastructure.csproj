@@ -91,20 +91,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\IUnitOfWork.cs" />
     <Compile Include="Data\ServiceFabricStorage\DTOs\Turn.cs" />
-    <Compile Include="Data\ServiceFabricStorage\DTOs\TurnMapperExtensions.cs" />
+    <Compile Include="Data\ServiceFabricStorage\DTOs\TurnMapper.cs" />
     <Compile Include="Data\ServiceFabricStorage\TurnRepositoryReliableStateManager.cs" />
     <Compile Include="Data\ServiceFabricStorage\UnitOfWorkReliableStateManager.cs" />
     <Compile Include="Integration\EventEmitter.cs" />
     <Compile Include="Integration\IntegrationHandlersProvider.cs" />
     <Compile Include="Integration\ServiceBusFactory.cs" />
+    <Compile Include="Data\IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IUGO.Domain\IUGO.Domain.csproj">
+      <Project>{aee14eb0-92ce-45e0-85a7-f2e392f2d3b6}</Project>
+      <Name>IUGO.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IUGO.EventBus.AzureServiceBus\IUGO.EventBus.AzureServiceBus.csproj">
       <Project>{c47f309e-b315-45d0-84bf-91f4cec2581a}</Project>
       <Name>IUGO.EventBus.AzureServiceBus</Name>
@@ -112,6 +116,10 @@
     <ProjectReference Include="..\IUGO.EventBus\IUGO.EventBus.csproj">
       <Project>{c6de7b58-3f28-45f6-a9a1-9e582cce1a28}</Project>
       <Name>IUGO.EventBus</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IUGO.Storage.AzureServiceFabric\IUGO.Storage.AzureServiceFabric.csproj">
+      <Project>{c4a35199-c3c6-401b-9fb3-4a87d68cc596}</Project>
+      <Name>IUGO.Storage.AzureServiceFabric</Name>
     </ProjectReference>
     <ProjectReference Include="..\IUGO.Turns.Core\IUGO.Turns.Core.csproj">
       <Project>{774bacb7-b650-4f31-a980-0096c59ff3ac}</Project>

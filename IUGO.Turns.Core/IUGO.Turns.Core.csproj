@@ -40,21 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Specifications\common\AllSpecification.cs" />
-    <Compile Include="Specifications\common\AndSpecification.cs" />
-    <Compile Include="Specifications\common\CompositeSpecification.cs" />
-    <Compile Include="Specifications\common\ExpressionSpecification.cs" />
-    <Compile Include="Specifications\common\ISpecification.cs" />
     <Compile Include="ITurnRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Specifications\common\NotSpecification.cs" />
-    <Compile Include="Specifications\common\OrSpecification.cs" />
     <Compile Include="Specifications\DriverSpecification.cs" />
     <Compile Include="Specifications\GoingToSpecification.cs" />
     <Compile Include="Specifications\PickingUpFromSpecification.cs" />
     <Compile Include="Specifications\PickUpDateSpecification.cs" />
     <Compile Include="Specifications\VehicleSpecification.cs" />
     <Compile Include="TurnAggreate\Turn.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IUGO.Domain\IUGO.Domain.csproj">
+      <Project>{aee14eb0-92ce-45e0-85a7-f2e392f2d3b6}</Project>
+      <Name>IUGO.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -55,7 +55,7 @@ namespace IUGO.Turns.Services
         public async Task<OutputTurnModel> FindTurn(Guid id)
         {
             var repo = await _unitOfWork.TurnsRepository;
-            var coreTurn = await repo.FindTurn(id);
+            var coreTurn = await repo.Find(id);
             var outputModel = coreTurn.MapToOutputTurnModel();
 
             return outputModel;
@@ -79,7 +79,7 @@ namespace IUGO.Turns.Services
             var vehicleIsAlreadyInTurn = (await repo.ListBySpecification(vehicleSpecification)).Any();
             if (vehicleIsAlreadyInTurn) throw new Exception("Vehicle is already in the queue");
 
-            await repo.AddTurn(turn);
+            await repo.Add(turn);
             await _unitOfWork.Commit();
 
             return turn.MapToOutputTurnModel();
@@ -89,8 +89,8 @@ namespace IUGO.Turns.Services
         {
 
             var repo = await _unitOfWork.TurnsRepository;
-            var turnToBeDeleted = await repo.FindTurn(id);
-            await repo.DeleteTurn(turnToBeDeleted);
+            var turnToBeDeleted = await repo.Find(id);
+            await repo.Delete(turnToBeDeleted);
 
             await _unitOfWork.Commit();
         }
@@ -98,20 +98,20 @@ namespace IUGO.Turns.Services
         public async Task AddDestination(Guid turnId, string destinationId)
         {
             var repo = await _unitOfWork.TurnsRepository;
-            var turn = await repo.FindTurn(turnId);
+            var turn = await repo.Find(turnId);
             turn.AddDestiniation(destinationId);
 
-            await repo.UpdateTurn(turnId, turn);
+            await repo.Update(turnId, turn);
             await _unitOfWork.Commit();
         }
 
         public async Task AddOrigin(Guid turnId, string originId)
         {
             var repo = await _unitOfWork.TurnsRepository;
-            var turn = await repo.FindTurn(turnId);
+            var turn = await repo.Find(turnId);
             turn.AddOrigin(originId);
 
-            await repo.UpdateTurn(turnId, turn);
+            await repo.Update(turnId, turn);
             await _unitOfWork.Commit();
         }
 
@@ -134,7 +134,7 @@ namespace IUGO.Turns.Services
         public async Task AssignTurnToShippingService(Guid turnId, string shippingServiceId)
         {
             var repo = await _unitOfWork.TurnsRepository;
-            var turn = await repo.FindTurn(turnId);
+            var turn = await repo.Find(turnId);
 
             var message = new TurnAssignedMessageIntegrationEvent()
             {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IUGO.Turns.Core.Specifications.common
+namespace IUGO.Domain.Specifications
 {
     public class ExpressionSpecification<T> : CompositeSpecification<T>
     {

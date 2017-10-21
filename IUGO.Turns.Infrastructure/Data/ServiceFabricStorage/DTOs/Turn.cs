@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IUGO.Storage.AzureServiceFabric;
 
 namespace IUGO.Turns.Infrastructure.Data.ServiceFabricStorage.DTOs
 {
-    public class Turn
+    public class Turn : IStorableItem
     {
         public Guid Id { get; set; }
         public DateTime QueuedFrom { get; set; }

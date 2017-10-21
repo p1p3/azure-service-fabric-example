@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using IUGO.Domain;
 
 namespace IUGO.Turns.Core.TurnAggreate
 {
-    public class Turn
+    public class Turn : IAggregate
     {
 
         public Turn(Guid id, DateTime queuedFrom, DateTime availableFrom, string driverId, string vehicleId,

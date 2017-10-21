@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\IUGO.Shipping.Core\IUGO.Shipping.Core.csproj" />
+    <ProjectReference Include="..\IUGO.Storage.AzureServiceFabric\IUGO.Storage.AzureServiceFabric.csproj" />
+  </ItemGroup>
+
+</Project>

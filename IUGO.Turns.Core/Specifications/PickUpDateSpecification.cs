@@ -1,5 +1,5 @@
 ﻿using System;
-using IUGO.Turns.Core.Specifications.common;
+using IUGO.Domain.Specifications;
 using IUGO.Turns.Core.TurnAggreate;
 
 namespace IUGO.Turns.Core.Specifications

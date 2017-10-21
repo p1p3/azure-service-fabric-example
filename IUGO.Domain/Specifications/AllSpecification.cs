@@ -1,4 +1,4 @@
-﻿namespace IUGO.Turns.Core.Specifications.common
+﻿namespace IUGO.Domain.Specifications
 {
     public class AllSpecification<T> : CompositeSpecification<T>
     {

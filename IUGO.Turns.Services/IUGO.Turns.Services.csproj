@@ -98,6 +98,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IUGO.Domain\IUGO.Domain.csproj">
+      <Project>{aee14eb0-92ce-45e0-85a7-f2e392f2d3b6}</Project>
+      <Name>IUGO.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\IUGO.EventBus\IUGO.EventBus.csproj">
       <Project>{c6de7b58-3f28-45f6-a9a1-9e582cce1a28}</Project>
       <Name>IUGO.EventBus</Name>

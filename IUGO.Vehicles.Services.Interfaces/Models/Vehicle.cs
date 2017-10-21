@@ -5,5 +5,6 @@
         public string PlateNumber { get; set; }
         public int Model { get; set; }
         public string OwnerId { get; set; }
+        public string DesignationId { get; set; }
     }
 }
