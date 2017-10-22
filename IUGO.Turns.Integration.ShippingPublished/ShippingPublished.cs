@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Fabric;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+using IUGO.EventBus.Abstractions;
+using IUGO.EventBus.AzureServiceBus;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using IUGO.EventBus.AzureServiceFabric.ServiceListener;
+using IUGO.Shippings.Services.Interfaces.Integration;
+using IUGO.Turns.Integration.ShippingPublished.Handlers;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace IUGO.Turns.Integration.ShippingPublished
 {
@@ -18,34 +21,41 @@ namespace IUGO.Turns.Integration.ShippingPublished
             : base(context)
         { }
 
-        /// <summary>
-        /// Optional override to create listeners (e.g., TCP, HTTP) for this service replica to handle client or user requests.
-        /// </summary>
-        /// <returns>A collection of listeners.</returns>
         protected override IEnumerable<ServiceInstanceListener> CreateServiceInstanceListeners()
         {
-            return new ServiceInstanceListener[0];
+            var serviceProvider = ServiceConfiguration.ConfigureContainer(
+                "Endpoint=sb://fjaramillo.servicebus.windows.net/;SharedAccessKeyName=manage;SharedAccessKey=u/M4nP3NUhfiBF7Ciuk+as6IuqmmBeGyh+l+t2V9orY=;EntityPath=shipping-published"
+                , "turns-integration");
+
+            return new[]
+            {
+                new ServiceInstanceListener(context =>serviceProvider.GetService<ServiceBusEventBusListener<ShippingPublishedIntegrationEvent, FindAndNotifyMatchingTurns>>(), "StatelessService-ServiceBusQueueListener")
+            };
         }
 
-        /// <summary>
-        /// This is the main entry point for your service instance.
-        /// </summary>
-        /// <param name="cancellationToken">Canceled when Service Fabric needs to shut down this service instance.</param>
-        protected override async Task RunAsync(CancellationToken cancellationToken)
+    }
+
+    internal class ServiceConfiguration
+    {
+        public static IServiceProvider ConfigureContainer(string serviceBusConnectionString, string subscriptionClientName)
         {
-            // TODO: Replace the following sample code with your own logic 
-            //       or remove this RunAsync override if it's not needed in your service.
+            IServiceCollection services = new ServiceCollection();
+            services.AddTransient<FindAndNotifyMatchingTurns>();
+            var eventBus = ConfigureEventBus(serviceBusConnectionString, subscriptionClientName, services);
 
-            long iterations = 0;
+            services.AddSingleton<IEventBus>(context => eventBus);
+            services.AddTransient<ServiceBusEventBusListener<ShippingPublishedIntegrationEvent, FindAndNotifyMatchingTurns>>();
+            
+            var provider = services.BuildServiceProvider();
 
-            while (true)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-
-                ServiceEventSource.Current.ServiceMessage(this.Context, "Working-{0}", ++iterations);
-
-                await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
-            }
+            return provider;
+        }
+        public static IEventBus ConfigureEventBus(string serviceBusConnectionString, string subscriptionClientName, IServiceCollection serviceCollection)
+        {
+            var provider = serviceCollection.BuildServiceProvider();
+            var serviceResolver = new IntegrationHandlersProvider(provider);
+            var defaultPersister = new DefaultServiceBusPersisterConnection(serviceBusConnectionString);
+            return new EventBusServiceBus(defaultPersister, subscriptionClientName, serviceResolver);
         }
     }
 }
