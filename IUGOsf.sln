@@ -43,7 +43,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IUGO.Vehicles.Services.Inte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IUGO.Drivers.Services.Interfaces", "IUGO.Drivers.Services.Interfaces\IUGO.Drivers.Services.Interfaces.csproj", "{97CEF860-0A4F-44B8-BBC2-E733F7293BF7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integrations", "Integrations", "{D9F742AC-2D2C-4145-9F79-8743913ADD1E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{D9F742AC-2D2C-4145-9F79-8743913ADD1E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IUGO.Shippings", "IUGO.Shippings", "{8881C528-3BEB-498F-B646-9EDCF917AF10}"
 EndProject
@@ -72,6 +72,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IUGO.Shippings.Services.Interfaces", "IUGO.Shippings.Services.Interfaces\IUGO.Shippings.Services.Interfaces.csproj", "{830DF2A2-B9BE-42A1-ABE0-192D41C8BAD0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IUGO.Shippings.API", "IUGO.Shippings.API\IUGO.Shippings.API.csproj", "{904FC53D-B0CA-4E65-983D-1389897C0862}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IUGO.Turns.Integration.ShippingPublished", "IUGO.Turns.Integration.ShippingPublished\IUGO.Turns.Integration.ShippingPublished.csproj", "{B844D6D4-DD03-4EDA-AC03-D027B65171EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -287,6 +289,14 @@ Global
 		{904FC53D-B0CA-4E65-983D-1389897C0862}.Release|Any CPU.Build.0 = Release|Any CPU
 		{904FC53D-B0CA-4E65-983D-1389897C0862}.Release|x64.ActiveCfg = Release|Any CPU
 		{904FC53D-B0CA-4E65-983D-1389897C0862}.Release|x64.Build.0 = Release|Any CPU
+		{B844D6D4-DD03-4EDA-AC03-D027B65171EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B844D6D4-DD03-4EDA-AC03-D027B65171EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B844D6D4-DD03-4EDA-AC03-D027B65171EF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B844D6D4-DD03-4EDA-AC03-D027B65171EF}.Debug|x64.Build.0 = Debug|Any CPU
+		{B844D6D4-DD03-4EDA-AC03-D027B65171EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B844D6D4-DD03-4EDA-AC03-D027B65171EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B844D6D4-DD03-4EDA-AC03-D027B65171EF}.Release|x64.ActiveCfg = Release|Any CPU
+		{B844D6D4-DD03-4EDA-AC03-D027B65171EF}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -320,6 +330,7 @@ Global
 		{53CEBD79-9656-4FE0-9F78-49E349207256} = {8881C528-3BEB-498F-B646-9EDCF917AF10}
 		{830DF2A2-B9BE-42A1-ABE0-192D41C8BAD0} = {8881C528-3BEB-498F-B646-9EDCF917AF10}
 		{904FC53D-B0CA-4E65-983D-1389897C0862} = {8881C528-3BEB-498F-B646-9EDCF917AF10}
+		{B844D6D4-DD03-4EDA-AC03-D027B65171EF} = {D9F742AC-2D2C-4145-9F79-8743913ADD1E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1FEBB017-7AF0-42D2-AEF9-5DE4D298CCAC}
