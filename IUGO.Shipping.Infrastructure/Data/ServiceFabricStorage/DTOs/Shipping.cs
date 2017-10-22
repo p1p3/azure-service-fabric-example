@@ -16,6 +16,10 @@ namespace IUGO.Shippings.Infrastructure.Data.ServiceFabricStorage.DTOs
         public double ShippingCost { get; set; }
         public string Comments { get; set; }
         public IEnumerable<string> RequiredVehicleDesignationsIds { get; set; }
+        public DateTime FinalPickUpDate { get; set; }
+        public DateTime DeliveryDate { get; set; }
+        public ShippingTurn AssignedTurn { get; set; }
+        public int ShippingState { get; set; }
 
     }
 }
