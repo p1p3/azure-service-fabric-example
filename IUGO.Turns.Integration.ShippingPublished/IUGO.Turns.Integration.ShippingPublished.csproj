@@ -27,6 +27,7 @@
     <ProjectReference Include="..\IUGO.EventBus.AzureServiceFabric\IUGO.EventBus.AzureServiceFabric.csproj" />
     <ProjectReference Include="..\IUGO.EventBus\IUGO.EventBus.csproj" />
     <ProjectReference Include="..\IUGO.Shippings.Services.Interfaces\IUGO.Shippings.Services.Interfaces.csproj" />
+    <ProjectReference Include="..\IUGO.Turns.Services.Interface\IUGO.Turns.Services.Interface.csproj" />
   </ItemGroup>
 
 </Project>

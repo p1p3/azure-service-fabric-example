@@ -19,7 +19,7 @@ namespace IUGO.Shippings.Services.Extensions
                 DeliveryDate = entity.DeliveryDate,
                 AssignedTurn = entity.AssignedTurn.MapToInterfaces(),
                 OrignId = entity.OrignId,
-                PickUpDate = entity.FinalPickUpDate,
+                PickUpDate = entity.PickUpDate,
                 AllocationDeadline = entity.AllocationDeadline,
                 Comments = entity.Comments,
                 ShippingCost = entity.ShippingCost,

@@ -16,5 +16,6 @@ namespace IUGO.Turns.Infrastructure.Data.ServiceFabricStorage.DTOs
         public string VehicleId { get; set; }
         public IEnumerable<string> OriginIds { get; set; }
         public IEnumerable<string> DestiniationIds { get; set; }
+        public string VehicleDesignationId { get; set; }
     }
 }

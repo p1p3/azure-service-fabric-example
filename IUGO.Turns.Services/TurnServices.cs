@@ -69,7 +69,8 @@ namespace IUGO.Turns.Services
 
             var turn = new Turn(turnInputModel.AvailableFrom
                 , turnInputModel.DriverId
-                , turnInputModel.VehicleId);
+                , turnInputModel.VehicleId
+                , turnInputModel.VehicleDesignationId);
 
             var driverSpecification = new DriverSpecification(turn.DriverId);
             var driverIsAlreadyInTurn = (await repo.ListBySpecification(driverSpecification)).Any();
@@ -115,13 +116,18 @@ namespace IUGO.Turns.Services
             await _unitOfWork.Commit();
         }
 
-        public async Task<IEnumerable<OutputTurnModel>> FindTurnsBy(IEnumerable<string> destinationIds, IEnumerable<string> originIds, DateTime pickUpDate)
+        public async Task<IEnumerable<OutputTurnModel>> FindTurnsBy(IEnumerable<string> destinationIds, IEnumerable<string> originIds, DateTime pickUpDate, IEnumerable<string> vehicleDesignationIds)
         {
             var destinationSpecification = new GoingToSpecification(destinationIds);
             var originSpecification = new PickingUpFromSpecification(originIds);
             var pickUpDateSpecification = new PickUpDateSpecification(pickUpDate);
+            var vehicleDesignationSpecificaion = new VehicleDesignationSpecification(vehicleDesignationIds);
 
-            var shippingSpecification = destinationSpecification.And(originSpecification).And(pickUpDateSpecification);
+            //TODO AND Not Taken
+            var shippingSpecification = destinationSpecification
+                                        .And(originSpecification)
+                                        .And(pickUpDateSpecification)
+                                        .And(vehicleDesignationSpecificaion);
 
             var repo = await _unitOfWork.TurnsRepository;
             var availableTurns = await repo.ListBySpecification(shippingSpecification);
@@ -144,6 +150,7 @@ namespace IUGO.Turns.Services
             };
 
             _turnAssignedEmitter.Emit(message);
+            // TODO MARk turn as taken...
             //var notification = new TurnAssignedEvent(message, "v1");
             //await notification.Notify();
         }

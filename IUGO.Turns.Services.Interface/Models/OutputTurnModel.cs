@@ -15,5 +15,6 @@ namespace IUGO.Turns.Services.Interface.Models
         public string VehicleId { get; set; }
         public IEnumerable<string> OriginIds { get; set; }
         public IEnumerable<string> DestiniationIds { get; set; }
+        public string VehicleDesignationId { get; set; }
     }
 }

@@ -17,7 +17,8 @@ namespace IUGO.Turns.Services.Mappers
                 DriverId = turn.DriverId,
                 Id = turn.Id.ToString(),
                 QueuedFrom = turn.QueuedFrom,
-                VehicleId = turn.VehicleId
+                VehicleId = turn.VehicleId,
+                VehicleDesignationId = turn.VehicleDesignationId
             };
         }
 

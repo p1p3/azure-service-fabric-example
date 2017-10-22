@@ -8,7 +8,10 @@ using Microsoft.ServiceFabric.Services.Runtime;
 using IUGO.EventBus.AzureServiceFabric.ServiceListener;
 using IUGO.Shippings.Services.Interfaces.Integration;
 using IUGO.Turns.Integration.ShippingPublished.Handlers;
+using IUGO.Turns.Services.Interface;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.ServiceFabric.Services.Client;
+using Microsoft.ServiceFabric.Services.Remoting.Client;
 
 namespace IUGO.Turns.Integration.ShippingPublished
 {
@@ -41,11 +44,22 @@ namespace IUGO.Turns.Integration.ShippingPublished
         {
             IServiceCollection services = new ServiceCollection();
             services.AddTransient<FindAndNotifyMatchingTurns>();
+            services.AddTransient<ITurnService>(context =>
+            {
+                var uri = "fabric:/IUGOsf/IUGO.Turns.Services";
+
+                return ServiceProxy.Create<ITurnService>(
+                    new Uri(uri),
+                    new ServicePartitionKey(0));
+            });
+
+
             var eventBus = ConfigureEventBus(serviceBusConnectionString, subscriptionClientName, services);
 
             services.AddSingleton<IEventBus>(context => eventBus);
             services.AddTransient<ServiceBusEventBusListener<ShippingPublishedIntegrationEvent, FindAndNotifyMatchingTurns>>();
-            
+
+
             var provider = services.BuildServiceProvider();
 
             return provider;

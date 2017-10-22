@@ -11,5 +11,6 @@ namespace IUGO.Turns.Services.Interface.Models
         public DateTime AvailableFrom { get; set; }
         public string DriverId { get; set; }
         public string VehicleId { get; set; }
+        public string VehicleDesignationId { get; set; }
     }
 }

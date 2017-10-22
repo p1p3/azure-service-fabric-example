@@ -19,9 +19,9 @@ namespace IUGO.Turns.API.Controllers
         }
 
         [HttpGet]
-        public Task<IEnumerable<OutputTurnModel>> Get([FromQuery] string destinationId, [FromQuery] string originId, [FromQuery] DateTime pickUpDate)
+        public Task<IEnumerable<OutputTurnModel>> Get([FromQuery] string destinationId, [FromQuery] string originId, [FromQuery] DateTime pickUpDate, string vehicleDesginationId)
         {
-            return _turnsService.FindTurnsBy(new[] { destinationId }, new[] { originId }, pickUpDate);
+            return _turnsService.FindTurnsBy(new[] { destinationId }, new[] { originId }, pickUpDate, new[] { vehicleDesginationId});
         }
 
         // GET api/values/5

@@ -8,7 +8,7 @@ namespace IUGO.Turns.Core.TurnAggreate
     {
 
         public Turn(Guid id, DateTime queuedFrom, DateTime availableFrom, string driverId, string vehicleId,
-            List<string> originIds, List<string> destiniationIds)
+            List<string> originIds, List<string> destiniationIds, string vehicleDesignationId)
         {
             Id = id;
             QueuedFrom = queuedFrom;
@@ -17,16 +17,17 @@ namespace IUGO.Turns.Core.TurnAggreate
             VehicleId = vehicleId;
             _originIds = originIds;
             _destiniationIds = destiniationIds;
+            VehicleDesignationId = vehicleDesignationId;
         }
 
-        public Turn(DateTime availableFrom, string driverId, string vehicleId, List<string> originIds, List<string> destiniationIds) :
-            this(Guid.NewGuid(), DateTime.Now, availableFrom, driverId, vehicleId, originIds, destiniationIds)
+        public Turn(DateTime availableFrom, string driverId, string vehicleId, List<string> originIds, List<string> destiniationIds, string vehicleDesignationId) :
+            this(Guid.NewGuid(), DateTime.Now, availableFrom, driverId, vehicleId, originIds, destiniationIds, vehicleDesignationId)
         {
 
 
         }
-        public Turn(DateTime availableFrom, string driverId, string vehicleId)
-            : this(availableFrom, driverId, vehicleId, new List<string>(), new List<string>())
+        public Turn(DateTime availableFrom, string driverId, string vehicleId, string vehicleDesignationId)
+            : this(availableFrom, driverId, vehicleId, new List<string>(), new List<string>(), vehicleDesignationId)
         {
 
         }
@@ -48,6 +49,7 @@ namespace IUGO.Turns.Core.TurnAggreate
 
         public string DriverId { get; private set; }
         public string VehicleId { get; private set; }
+        public string VehicleDesignationId { get; private set; }
 
         public IReadOnlyCollection<string> OriginIds => _originIds;
         private readonly List<string> _originIds;
