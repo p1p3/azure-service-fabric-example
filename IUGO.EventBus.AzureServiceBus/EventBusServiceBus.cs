@@ -54,7 +54,7 @@ namespace IUGO.EventBus.AzureServiceBus
             var message = new Message
             {
                 MessageId = new Guid().ToString(),
-                Body = Encoding.UTF8.GetBytes(jsonMessage),
+                Body = body,
                 Label = eventName,
             };
 

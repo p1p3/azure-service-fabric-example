@@ -12,9 +12,9 @@ namespace IUGO.Shippings.Infrastructure.Integration
             _eventBus = eventBus;
         }
 
-        public void Emit(T turnAssigned)
+        public void Emit(T eventMessage)
         {
-            _eventBus.Publish(turnAssigned);
+            _eventBus.Publish(eventMessage);
         }
     }
 }
