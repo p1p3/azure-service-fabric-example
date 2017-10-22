@@ -1,8 +1,8 @@
 ﻿using IUGO.Domain;
+using IUGO.Shippings.Core.ShippingAggregate;
 
-namespace IUGO.Shipping.Core
+namespace IUGO.Shippings.Core
 {
-    using ShippingAggregate;
     public interface IShippingRepository : IGenericRepository<Shipping>
     {
 

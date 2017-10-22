@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using IUGO.EventBus.Abstractions;
 using IUGO.Turns.Services.Interface.Integration;
 
-namespace IUGO.Shipping.Integration.TurnAssigned.Handlers
+namespace IUGO.Shippings.Integration.TurnAssigned.Handlers
 {
     public class AssignTurnToShippingHandler : IIntegrationEventHandler<TurnAssignedMessageIntegrationEvent>
     {

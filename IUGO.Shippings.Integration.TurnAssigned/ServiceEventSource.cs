@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Runtime;
 
-namespace IUGO.Shipping.Integration.TurnAssigned
+namespace IUGO.Shippings.Integration.TurnAssigned
 {
-    [EventSource(Name = "MyCompany-IUGOsf-IUGO.Shipping.Integration.TurnAssigned")]
+    [EventSource(Name = "MyCompany-IUGOsf-IUGO.Shippings.Integration.TurnAssigned")]
     internal sealed class ServiceEventSource : EventSource
     {
         public static readonly ServiceEventSource Current = new ServiceEventSource();

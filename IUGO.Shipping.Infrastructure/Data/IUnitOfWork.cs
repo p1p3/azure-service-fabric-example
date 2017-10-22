@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using IUGO.Shipping.Core;
+using IUGO.Shippings.Core;
 
-namespace IUGO.Shipping.Infrastructure.Data
+namespace IUGO.Shippings.Infrastructure.Data
 {
     public interface IUnitOfWork : IDisposable
     {

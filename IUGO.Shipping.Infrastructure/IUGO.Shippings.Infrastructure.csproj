@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\IUGO.Shipping.Core\IUGO.Shipping.Core.csproj" />
+    <ProjectReference Include="..\IUGO.Shipping.Core\IUGO.Shippings.Core.csproj" />
     <ProjectReference Include="..\IUGO.Storage.AzureServiceFabric\IUGO.Storage.AzureServiceFabric.csproj" />
   </ItemGroup>
 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using IUGO.Storage.AzureServiceFabric;
 
-namespace IUGO.Shipping.Infrastructure.Data.ServiceFabricStorage.DTOs
+namespace IUGO.Shippings.Infrastructure.Data.ServiceFabricStorage.DTOs
 {
     public class Shipping : IStorableItem
     {

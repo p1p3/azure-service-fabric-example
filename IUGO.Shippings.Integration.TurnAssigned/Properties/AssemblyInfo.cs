@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("IUGO.Shipping.Integration.TurnAssigned")]
+[assembly: AssemblyTitle("IUGO.Shippings.Integration.TurnAssigned")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("IUGO.Shipping.Integration.TurnAssigned")]
+[assembly: AssemblyProduct("IUGO.Shippings.Integration.TurnAssigned")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a9813cd1-61e7-4127-b987-af2b1e4a4b41")]
+[assembly: Guid("51feb726-c882-499a-97b5-d08e1f460530")]
 
 // Version information for an assembly consists of the following four values:
 //

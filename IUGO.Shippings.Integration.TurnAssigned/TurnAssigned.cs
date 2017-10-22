@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Fabric;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using IUGO.EventBus.Abstractions;
 using IUGO.EventBus.AzureServiceBus;
 using IUGO.EventBus.AzureServiceFabric.ServiceListener;
-using IUGO.Shipping.Integration.TurnAssigned.Handlers;
+using IUGO.Shippings.Integration.TurnAssigned.Handlers;
 using IUGO.Turns.Services.Interface.Integration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 
-namespace IUGO.Shipping.Integration.TurnAssigned
+namespace IUGO.Shippings.Integration.TurnAssigned
 {
     /// <summary>
     /// An instance of this class is created for each service instance by the Service Fabric runtime.
@@ -39,10 +35,9 @@ namespace IUGO.Shipping.Integration.TurnAssigned
             {
                 new ServiceInstanceListener(context => new ServiceBusEventBusListener<TurnAssignedMessageIntegrationEvent, AssignTurnToShippingHandler>(eventBus), "StatelessService-ServiceBusQueueListener")
             };
-
         }
 
-
+   
     }
 
     internal class ServiceConfiguration

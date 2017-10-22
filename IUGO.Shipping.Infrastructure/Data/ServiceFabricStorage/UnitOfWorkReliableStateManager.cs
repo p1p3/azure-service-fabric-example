@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using IUGO.Shipping.Core;
-using IUGO.Shipping.Core.ShippingAggregate;
+using IUGO.Shippings.Core;
 using Microsoft.ServiceFabric.Data;
 using Microsoft.ServiceFabric.Data.Collections;
 
-namespace IUGO.Shipping.Infrastructure.Data.ServiceFabricStorage
+namespace IUGO.Shippings.Infrastructure.Data.ServiceFabricStorage
 {
     public class UnitOfWorkReliableStateManager : IUnitOfWork
     {

@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Runtime;
 
-namespace IUGO.Shipping.Integration.TurnAssigned
+namespace IUGO.Shippings.Integration.TurnAssigned
 {
     internal static class Program
     {
@@ -21,7 +21,7 @@ namespace IUGO.Shipping.Integration.TurnAssigned
                 // When Service Fabric creates an instance of this service type,
                 // an instance of the class is created in this host process.
 
-                ServiceRuntime.RegisterServiceAsync("IUGO.Shipping.Integration.TurnAssignedType",
+                ServiceRuntime.RegisterServiceAsync("IUGO.Shippings.Integration.TurnAssignedType",
                     context => new TurnAssigned(context)).GetAwaiter().GetResult();
 
                 ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(TurnAssigned).Name);

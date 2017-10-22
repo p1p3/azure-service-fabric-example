@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ServiceManifest Name="IUGO.Shipping.Integration.TurnAssignedPkg"
+<ServiceManifest Name="IUGO.Shippings.Integration.TurnAssignedPkg"
                  Version="1.0.0"
                  xmlns="http://schemas.microsoft.com/2011/01/fabric"
                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
@@ -7,14 +7,14 @@
   <ServiceTypes>
     <!-- This is the name of your ServiceType. 
          This name must match the string used in RegisterServiceType call in Program.cs. -->
-    <StatelessServiceType ServiceTypeName="IUGO.Shipping.Integration.TurnAssignedType" />
+    <StatelessServiceType ServiceTypeName="IUGO.Shippings.Integration.TurnAssignedType" />
   </ServiceTypes>
 
   <!-- Code package is your service executable. -->
   <CodePackage Name="Code" Version="1.0.0">
     <EntryPoint>
       <ExeHost>
-        <Program>IUGO.Shipping.Integration.TurnAssigned.exe</Program>
+        <Program>IUGO.Shippings.Integration.TurnAssigned.exe</Program>
       </ExeHost>
     </EntryPoint>
   </CodePackage>

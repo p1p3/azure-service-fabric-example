@@ -1,13 +1,11 @@
 ﻿using System.Linq;
 using IUGO.Storage.AzureServiceFabric;
 
-namespace IUGO.Shipping.Infrastructure.Data.ServiceFabricStorage.DTOs
+namespace IUGO.Shippings.Infrastructure.Data.ServiceFabricStorage.DTOs
 {
-    using Core = Core.ShippingAggregate;
-
-    public  class ShippingMapper : IStorableEntityMapper<Core.Shipping,DTOs.Shipping>
+    public  class ShippingMapper : IStorableEntityMapper<Core.ShippingAggregate.Shipping,DTOs.Shipping>
     {
-        public Shipping MapToStorable(Core.Shipping entity)
+        public Shipping MapToStorable(Core.ShippingAggregate.Shipping entity)
         {
             return new DTOs.Shipping()
             {
@@ -24,9 +22,9 @@ namespace IUGO.Shipping.Infrastructure.Data.ServiceFabricStorage.DTOs
             };
         }
 
-        public Core.Shipping MapToCore(Shipping entity)
+        public Core.ShippingAggregate.Shipping MapToCore(Shipping entity)
         {
-            return new Core.Shipping(entity.Id, entity.OrignId, entity.DestinationId, entity.PickUpDate,
+            return new Core.ShippingAggregate.Shipping(entity.Id, entity.OrignId, entity.DestinationId, entity.PickUpDate,
                 entity.ShippingServiceName,
                 entity.ShippingCost,
                 entity.AllocationDeadline,

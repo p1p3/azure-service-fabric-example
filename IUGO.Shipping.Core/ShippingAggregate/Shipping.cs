@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using IUGO.Domain;
 
-namespace IUGO.Shipping.Core.ShippingAggregate
+namespace IUGO.Shippings.Core.ShippingAggregate
 {
     public class Shipping : IAggregate
     {
