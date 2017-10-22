@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace IUGO.Shippings.Core.ShippingAggregate
+﻿namespace IUGO.Shippings.Core.ShippingAggregate
 {
     public enum ShippingStates
     {
         Created = 0,
-        Assigned = 1,
-        PickedUp = 2,
-        Delivired = 3,
+        Published = 1,
+        Assigned = 2,
+        PickedUp = 3,
+        Delivired = 4,
+        Cancelled = 5
     }
 }

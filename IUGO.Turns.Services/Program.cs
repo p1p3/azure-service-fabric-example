@@ -28,7 +28,7 @@ namespace IUGO.Turns.Services
 
                 var eventBus = ServiceBusFactory.CreateAzureEventBusInstance(
                     "Endpoint=sb://fjaramillo.servicebus.windows.net/;SharedAccessKeyName=manage;SharedAccessKey=mVb/KgmcNz6VMhUf8u+UxXfA3RHusg/eafWcS5KYS18=;EntityPath=turn-assigned",
-                    serviceName);
+                    "turn-services");
 
                 var turnAssignedEventEmitter = new EventEmitter<TurnAssignedMessageIntegrationEvent>(eventBus);
 

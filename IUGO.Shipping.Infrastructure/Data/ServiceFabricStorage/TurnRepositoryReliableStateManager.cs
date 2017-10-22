@@ -8,7 +8,7 @@ using Shipping = IUGO.Shippings.Core.ShippingAggregate.Shipping;
 
 namespace IUGO.Shippings.Infrastructure.Data.ServiceFabricStorage
 {
-    public class ShippingRepositoryReliableStateManager : AggregateGenericRepositoryReliableStateManager<Shipping,DTOs.Shipping>,IShippingRepository
+    internal class ShippingRepositoryReliableStateManager : AggregateGenericRepositoryReliableStateManager<Shipping,DTOs.Shipping>,IShippingRepository
     {
         public ShippingRepositoryReliableStateManager(IReliableDictionary<Guid, DTOs.Shipping> aggreateStorage,
             ITransaction transaction) : base(aggreateStorage, transaction, new ShippingMapper())

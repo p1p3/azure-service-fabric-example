@@ -24,7 +24,8 @@ namespace IUGO.Shippings.Infrastructure.Data.ServiceFabricStorage.DTOs
                 (ShippingStates)entity.ShippingState,
                 MapToCore(entity.AssignedTurn),
                 entity.FinalPickUpDate,
-                entity.DeliveryDate);
+                entity.DeliveryDate,
+                entity.Candidates.Select(MapToCore).ToList());
         }
 
         private Core.ShippingAggregate.ShippingDriver MapToCore(ShippingDriver entity)
@@ -63,7 +64,8 @@ namespace IUGO.Shippings.Infrastructure.Data.ServiceFabricStorage.DTOs
                 ShippingState = (int)entity.ShippingState,
                 AssignedTurn = MapToStorable(entity.AssignedTurn),
                 FinalPickUpDate = entity.FinalPickUpDate,
-                DeliveryDate = entity.DeliveryDate
+                DeliveryDate = entity.DeliveryDate,
+                Candidates =  entity.Candidates.Select(MapToStorable)
             };
         }
 

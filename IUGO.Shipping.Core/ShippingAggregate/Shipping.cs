@@ -8,7 +8,7 @@ namespace IUGO.Shippings.Core.ShippingAggregate
     {
         public Shipping(Guid id, string orignId, string destinationId, DateTime pickUpDate, string shippingServiceName, double shippingCost,
             DateTime allocationDeadline, string comments, DateTime creationDate, List<string> requiredVehicleDesginationIds, ShippingStates state,
-            ShippingTurn assignedturn, DateTime finalPickUpDate, DateTime deliveryDate)
+            ShippingTurn assignedturn, DateTime finalPickUpDate, DateTime deliveryDate, List<ShippingTurn> candidates)
         {
             Id = id;
             OrignId = orignId;
@@ -23,6 +23,8 @@ namespace IUGO.Shippings.Core.ShippingAggregate
             AssignedTurn = assignedturn;
             FinalPickUpDate = finalPickUpDate;
             DeliveryDate = deliveryDate;
+            ShippingState = state;
+            _candidates = candidates;
         }
 
         public static Shipping CreateShipping(string orignId, string destinationId, DateTime pickUpDate,
@@ -37,7 +39,8 @@ namespace IUGO.Shippings.Core.ShippingAggregate
                 ShippingStates.Created,
                 new NullShippingTurn(),
                 default(DateTime),
-                default(DateTime));
+                default(DateTime),
+                new List<ShippingTurn>());
         }
 
 
@@ -56,13 +59,16 @@ namespace IUGO.Shippings.Core.ShippingAggregate
 
         public ShippingTurn AssignedTurn { get; private set; }
 
+        public IReadOnlyCollection<ShippingTurn> Candidates => _candidates;
+        private readonly List<ShippingTurn> _candidates;
 
         public IReadOnlyCollection<string> RequiredVehicleDesignationsIds => _requiredVehicleDesignationsIds;
         private readonly List<string> _requiredVehicleDesignationsIds;
 
         public void AddRequiredVehicleDesignation(string id)
         {
-            this._requiredVehicleDesignationsIds.Add(id);
+            if (!this._requiredVehicleDesignationsIds.Contains(id))
+                this._requiredVehicleDesignationsIds.Add(id);
         }
 
         public void AssignTurn(ShippingTurn turn)
@@ -84,6 +90,17 @@ namespace IUGO.Shippings.Core.ShippingAggregate
             this.ShippingState = ShippingStates.PickedUp;
         }
 
+
+        public void PublishShippingOrder()
+        {
+            if(this._requiredVehicleDesignationsIds.Count < 1) throw new Exception("The shipping order must contains at least 1 vehicle designation");
+            this.ShippingState = ShippingStates.Published;
+        }
+
+        public void AddCandidate(ShippingTurn turn)
+        {
+            this._candidates.Add(turn);
+        }
 
 
     }

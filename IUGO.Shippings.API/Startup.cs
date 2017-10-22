@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using IUGO.Turns.Services.Interface;
+using IUGO.Shippings.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.ServiceFabric.Services.Client;
 using Microsoft.ServiceFabric.Services.Remoting.Client;
 
-namespace IUGO.Turns.API
+namespace IUGO.Shippings.API
 {
     public class Startup
     {
@@ -27,7 +22,7 @@ namespace IUGO.Turns.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-            services.AddTurnService();
+            services.AddShippingService();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,16 +39,16 @@ namespace IUGO.Turns.API
 
     public static class ServiceFactory
     {
-        public static void AddTurnService(this IServiceCollection services)
+        public static void AddShippingService(this IServiceCollection services)
         {
-            services.AddTransient<ITurnService>(provider => CreateCompanyService());
+            services.AddTransient<IShippingService>(provider => CeateShippingService());
         }
 
-        public static ITurnService CreateCompanyService()
+        public static IShippingService CeateShippingService()
         {
-            var uri = "fabric:/IUGOsf/IUGO.Turns.Services";
+            var uri = "fabric:/IUGOsf/IUGO.Shippings.Services";
 
-            return ServiceProxy.Create<ITurnService>(
+            return ServiceProxy.Create<IShippingService>(
                 new Uri(uri),
                 new ServicePartitionKey(0));
         }
