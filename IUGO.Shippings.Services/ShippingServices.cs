@@ -30,10 +30,11 @@ namespace IUGO.Shippings.Services
         private IUnitOfWork _unitOfWork;
         private CancellationToken _cancellationToken;
 
-        public ShippingServices(StatefulServiceContext context, EventEmitter<ShippingPublishedIntegrationEvent> shippingPublishedEventEmitter)
+        public ShippingServices(StatefulServiceContext context, EventEmitter<ShippingPublishedIntegrationEvent> shippingPublishedEventEmitter, EventEmitter<ShippingOfferAcceptedIntegrationEvent> shippingOfferAccepted)
             : base(context)
         {
             _shippingPublishedEventEmitter = shippingPublishedEventEmitter;
+            _shippingOfferAccepted = shippingOfferAccepted;
         }
 
         protected override IEnumerable<ServiceReplicaListener> CreateServiceReplicaListeners()

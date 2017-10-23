@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using IUGO.Domain;
+using System.Linq;
 
 namespace IUGO.Shippings.Core.ShippingAggregate
 {
@@ -93,13 +94,14 @@ namespace IUGO.Shippings.Core.ShippingAggregate
 
         public void PublishShippingOrder()
         {
-            if(this._requiredVehicleDesignationsIds.Count < 1) throw new Exception("The shipping order must contains at least 1 vehicle designation");
+            if (this._requiredVehicleDesignationsIds.Count < 1) throw new Exception("The shipping order must contains at least 1 vehicle designation");
             this.ShippingState = ShippingStates.Published;
         }
 
         public void AddCandidate(ShippingTurn turn)
         {
-            this._candidates.Add(turn);
+            if (!this._candidates.Any(candidate => candidate.TurnId == turn.TurnId))
+                this._candidates.Add(turn);
         }
 
 

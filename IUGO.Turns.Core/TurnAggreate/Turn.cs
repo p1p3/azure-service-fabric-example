@@ -38,16 +38,19 @@ namespace IUGO.Turns.Core.TurnAggreate
         public DateTime QueuedFrom { get; private set; }
         public DateTime AvailableFrom { get; private set; }
 
-        public bool IsTurnAssigned => string.IsNullOrEmpty(ShippingId);
+        public bool IsTurnAssigned => !string.IsNullOrEmpty(ShippingId);
 
         public void AddOrigin(string originId)
         {
-            this._originIds.Add(originId);
+            if (!this._originIds.Contains(originId))
+                this._originIds.Add(originId);
         }
         public void AddDestiniation(string destinationId)
         {
-            this._destiniationIds.Add(destinationId);
+            if (!this._destiniationIds.Contains(destinationId))
+                this._destiniationIds.Add(destinationId);
         }
+
         public void AssignShipping(string shippingId)
         {
             if (_acceptedShippingsOffers.Contains(shippingId))

@@ -21,7 +21,7 @@ namespace IUGO.Turns.Integration.ShippingPublished.Handlers
             var pickUpDate = @event.ShippingInformation.PickUpDate;
             var vehicleDesignations = @event.ShippingInformation.RequiredVehicleDesignationsIds;
 
-            var turns = await _turnService.FindTurnsBy(destinationIds
+            var turns = await _turnService.FindTurnsNotAssignedBy(destinationIds
                , originIds
                , pickUpDate
                , vehicleDesignations);

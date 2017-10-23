@@ -47,6 +47,7 @@
     <Compile Include="Specifications\PickingUpFromSpecification.cs" />
     <Compile Include="Specifications\PickUpDateSpecification.cs" />
     <Compile Include="Specifications\VehicleDesignationSpecification.cs" />
+    <Compile Include="Specifications\TurnNotAssignedSpecification.cs" />
     <Compile Include="Specifications\VehicleSpecification.cs" />
     <Compile Include="TurnAggreate\Turn.cs" />
   </ItemGroup>

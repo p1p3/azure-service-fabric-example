@@ -34,7 +34,7 @@ namespace IUGO.Shippings.Services
                 var shippingOfferAcceptedEventEmitter = new EventEmitter<ShippingOfferAcceptedIntegrationEvent>(eventBusForOffers);
 
                 ServiceRuntime.RegisterServiceAsync("IUGO.Shippings.ServicesType",
-                    context => new ShippingServices(context, turnAssignedEventEmitter)).GetAwaiter().GetResult();
+                    context => new ShippingServices(context, turnAssignedEventEmitter, shippingOfferAcceptedEventEmitter)).GetAwaiter().GetResult();
 
                 ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(ShippingServices).Name);
 

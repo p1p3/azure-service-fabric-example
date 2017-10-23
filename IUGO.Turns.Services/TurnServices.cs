@@ -116,18 +116,19 @@ namespace IUGO.Turns.Services
             await _unitOfWork.Commit();
         }
 
-        public async Task<IEnumerable<OutputTurnModel>> FindTurnsBy(IEnumerable<string> destinationIds, IEnumerable<string> originIds, DateTime pickUpDate, IEnumerable<string> vehicleDesignationIds)
+        public async Task<IEnumerable<OutputTurnModel>> FindTurnsNotAssignedBy(IEnumerable<string> destinationIds, IEnumerable<string> originIds, DateTime pickUpDate, IEnumerable<string> vehicleDesignationIds)
         {
             var destinationSpecification = new GoingToSpecification(destinationIds);
             var originSpecification = new PickingUpFromSpecification(originIds);
             var pickUpDateSpecification = new PickUpDateSpecification(pickUpDate);
             var vehicleDesignationSpecificaion = new VehicleDesignationSpecification(vehicleDesignationIds);
+            var turnAssignedSpecification = new TurnNotAssignedSpecification();
 
-            //TODO AND Not Taken
             var shippingSpecification = destinationSpecification
                                         .And(originSpecification)
                                         .And(pickUpDateSpecification)
-                                        .And(vehicleDesignationSpecificaion);
+                                        .And(vehicleDesignationSpecificaion)
+                                        .And(turnAssignedSpecification);
 
             var repo = await _unitOfWork.TurnsRepository;
             var availableTurns = await repo.ListBySpecification(shippingSpecification);
