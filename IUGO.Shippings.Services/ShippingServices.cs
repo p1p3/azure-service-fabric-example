@@ -25,6 +25,8 @@ namespace IUGO.Shippings.Services
     internal sealed class ShippingServices : StatefulService, IShippingService
     {
         private readonly EventEmitter<ShippingPublishedIntegrationEvent> _shippingPublishedEventEmitter;
+        private readonly EventEmitter<ShippingOfferAcceptedIntegrationEvent> _shippingOfferAccepted;
+
         private IUnitOfWork _unitOfWork;
         private CancellationToken _cancellationToken;
 
@@ -92,6 +94,14 @@ namespace IUGO.Shippings.Services
             shipping.AddCandidate(canadidate.MapToCore());
 
             await UpdateShipping(shipping);
+
+            var eventMessage = new ShippingOfferAcceptedIntegrationEvent()
+            {
+                ShippingId = shippingId.ToString(),
+                TurnId = canadidate.TurnId
+            };
+
+            _shippingOfferAccepted.Emit(eventMessage);
 
             return shipping.MapToInterfaces();
         }

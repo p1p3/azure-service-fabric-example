@@ -21,7 +21,7 @@ namespace IUGO.Turns.API.Controllers
         [HttpGet]
         public Task<IEnumerable<OutputTurnModel>> Get([FromQuery] string destinationId, [FromQuery] string originId, [FromQuery] DateTime pickUpDate, string vehicleDesginationId)
         {
-            return _turnsService.FindTurnsBy(new[] { destinationId }, new[] { originId }, pickUpDate, new[] { vehicleDesginationId});
+            return _turnsService.FindTurnsBy(new[] { destinationId }, new[] { originId }, pickUpDate, new[] { vehicleDesginationId });
         }
 
         // GET api/values/5
@@ -43,13 +43,6 @@ namespace IUGO.Turns.API.Controllers
         public Task Delete(string id)
         {
             return _turnsService.DeleteTurn(Guid.Parse(id));
-        }
-
-        // POST api/values
-        [HttpPut("{id}")]
-        public Task Post(string id, [FromBody]string shippingServiceId)
-        {
-            return _turnsService.AssignTurnToShippingService(Guid.Parse(id), shippingServiceId);
         }
 
     }

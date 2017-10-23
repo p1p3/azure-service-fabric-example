@@ -18,7 +18,9 @@ namespace IUGO.Turns.Services.Mappers
                 Id = turn.Id.ToString(),
                 QueuedFrom = turn.QueuedFrom,
                 VehicleId = turn.VehicleId,
-                VehicleDesignationId = turn.VehicleDesignationId
+                VehicleDesignationId = turn.VehicleDesignationId,
+                ShippingId = turn.ShippingId,
+                AcceptedShippingsOffers = turn.AcceptedShippingsOffers
             };
         }
 

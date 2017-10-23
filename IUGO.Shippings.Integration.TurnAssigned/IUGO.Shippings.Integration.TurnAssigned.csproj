@@ -18,6 +18,7 @@
     <PackageReference Include="Microsoft.ServiceFabric.Data" Version="2.7.198" />
     <PackageReference Include="Microsoft.ServiceFabric.Diagnostics.Internal" Version="2.7.198" />
     <PackageReference Include="Microsoft.ServiceFabric.Services" Version="2.7.198" />
+    <PackageReference Include="Microsoft.ServiceFabric.Services.Remoting" Version="2.7.198" />
     <PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager" Version="3.2.3" />
     <PackageReference Include="ServiceFabric.ServiceBus.Services" Version="5.1.2" />
   </ItemGroup>
@@ -26,6 +27,7 @@
     <ProjectReference Include="..\IUGO.EventBus.AzureServiceBus\IUGO.EventBus.AzureServiceBus.csproj" />
     <ProjectReference Include="..\IUGO.EventBus.AzureServiceFabric\IUGO.EventBus.AzureServiceFabric.csproj" />
     <ProjectReference Include="..\IUGO.EventBus\IUGO.EventBus.csproj" />
+    <ProjectReference Include="..\IUGO.Shippings.Services.Interfaces\IUGO.Shippings.Services.Interfaces.csproj" />
     <ProjectReference Include="..\IUGO.Turns.Services.Interface\IUGO.Turns.Services.Interface.csproj" />
   </ItemGroup>
 

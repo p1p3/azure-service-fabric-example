@@ -27,6 +27,12 @@ namespace IUGO.Shippings.Services
 
                 var turnAssignedEventEmitter = new EventEmitter<ShippingPublishedIntegrationEvent>(eventBus);
 
+                var eventBusForOffers = ServiceBusFactory.CreateAzureEventBusInstance(
+                    "Endpoint=sb://fjaramillo.servicebus.windows.net/;SharedAccessKeyName=manage;SharedAccessKey=FvKlnrh/74PqqUZ+8R6EvNa4STsfW+dmvZ/NViWw7NM=;EntityPath=shipping-offer-accepted",
+                    "shipping-services");
+
+                var shippingOfferAcceptedEventEmitter = new EventEmitter<ShippingOfferAcceptedIntegrationEvent>(eventBusForOffers);
+
                 ServiceRuntime.RegisterServiceAsync("IUGO.Shippings.ServicesType",
                     context => new ShippingServices(context, turnAssignedEventEmitter)).GetAwaiter().GetResult();
 

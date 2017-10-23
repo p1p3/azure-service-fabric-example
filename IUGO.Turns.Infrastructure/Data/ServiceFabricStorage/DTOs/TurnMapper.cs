@@ -19,7 +19,9 @@ namespace IUGO.Turns.Infrastructure.Data.ServiceFabricStorage.DTOs
                 Id = entity.Id,
                 QueuedFrom = entity.QueuedFrom,
                 VehicleId = entity.VehicleId,
-                VehicleDesignationId = entity.VehicleDesignationId
+                VehicleDesignationId = entity.VehicleDesignationId,
+                ShippingId = entity.ShippingId,
+                AcceptedShippingsOffers = entity.AcceptedShippingsOffers
             };
         }
 
@@ -31,7 +33,9 @@ namespace IUGO.Turns.Infrastructure.Data.ServiceFabricStorage.DTOs
                 , entity.VehicleId
                 , entity.OriginIds.ToList()
                 , entity.DestiniationIds.ToList()
-                , entity.VehicleDesignationId);
+                , entity.VehicleDesignationId
+                , entity.AcceptedShippingsOffers.ToList()
+                , entity.ShippingId);
         }
     }
 }

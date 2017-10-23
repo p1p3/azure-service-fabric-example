@@ -144,9 +144,11 @@ namespace IUGO.Turns.Services
 
             var message = new TurnAssignedMessageIntegrationEvent()
             {
+                TurnId = turn.Id.ToString(),
                 DriverId = turn.DriverId,
                 VehicleId = turn.VehicleId,
-                ShippingServiceId = shippingServiceId
+                ShippingServiceId = shippingServiceId,
+                VehicleDesignationId = turn.VehicleDesignationId
             };
 
             _turnAssignedEmitter.Emit(message);
