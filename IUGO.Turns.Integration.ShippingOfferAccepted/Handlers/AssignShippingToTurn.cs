@@ -20,7 +20,7 @@ namespace IUGO.Turns.Integration.ShippingOfferAccepted.Handlers
             var turnId = Guid.Parse(@event.TurnId);
             var shippingId = @event.ShippingId;
 
-            await _turnService.AssignTurnToShippingService(turnId, shippingId);
+            await _turnService.AcceptShippingOffer(turnId, shippingId);
         }
     }
 }

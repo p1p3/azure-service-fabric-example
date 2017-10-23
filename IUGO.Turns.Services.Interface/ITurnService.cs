@@ -20,5 +20,6 @@ namespace IUGO.Turns.Services.Interface
             IEnumerable<string> originIds, DateTime pickUpDate, IEnumerable<string> vehicleDesignationIds);
 
         Task AssignTurnToShippingService(Guid turnId, string shippingServiceId);
+        Task AcceptShippingOffer(Guid turnId, string shippingServiceId);
     }
 }

@@ -142,6 +142,9 @@ namespace IUGO.Turns.Services
         {
             var repo = await _unitOfWork.TurnsRepository;
             var turn = await repo.Find(turnId);
+            turn.AssignShipping(shippingServiceId);
+            await repo.Update(turnId, turn);
+            await _unitOfWork.Commit();
 
             var message = new TurnAssignedMessageIntegrationEvent()
             {
@@ -153,9 +156,16 @@ namespace IUGO.Turns.Services
             };
 
             _turnAssignedEmitter.Emit(message);
-            // TODO MARk turn as taken...
-            //var notification = new TurnAssignedEvent(message, "v1");
-            //await notification.Notify();
+        }
+
+        public async Task AcceptShippingOffer(Guid turnId, string shippingServiceId)
+        {
+            var repo = await _unitOfWork.TurnsRepository;
+            var turn = await repo.Find(turnId);
+            turn.AcceptShippingOffer(shippingServiceId);
+            await repo.Update(turnId, turn);
+
+            await _unitOfWork.Commit();
         }
     }
 }
