@@ -22,9 +22,7 @@ namespace IUGO.Turns.Infrastructure.Data.ServiceFabricStorage
         public async Task Commit()
         {
             await this._transaction.CommitAsync();
-            this._transaction.Dispose();
-            
-            _transaction = _stateManager.CreateTransaction();
+            this._transaction.Dispose();        
         }
 
         private async Task<ITurnRepository> CreateTurnsRepository()

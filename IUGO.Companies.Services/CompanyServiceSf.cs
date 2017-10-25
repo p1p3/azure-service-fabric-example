@@ -15,13 +15,12 @@ namespace IUGO.Companies.Services
 {
     internal class CompanyServiceSf : StatefulService, ICompanyService
     {
-        private IUnitOfWork _unitOfWork;
         private CancellationToken _cancellationToken;
 
         /// <inheritdoc />
         protected override Task RunAsync(CancellationToken cancellationToken)
         {
-            _unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager);
+
             _cancellationToken = cancellationToken;
             return Task.CompletedTask;
         }
@@ -43,17 +42,23 @@ namespace IUGO.Companies.Services
 
         public async Task AddCompany(DTOs.Company company)
         {
-            var domainCompany = new Company() { Id = company.Id, Name = company.Name };
-            var repo = await _unitOfWork.CompanyRepository;
-            await repo.Create(domainCompany);
-            await _unitOfWork.Commit();
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var domainCompany = new Company() { Id = company.Id, Name = company.Name };
+                var repo = await unitOfWork.CompanyRepository;
+                await repo.Create(domainCompany);
+                await unitOfWork.Commit();
+            }
         }
 
         public async Task<IEnumerable<DTOs.Company>> ListAll()
         {
-            var repo = await _unitOfWork.CompanyRepository;
-            var companies = await repo.List();
-            return companies.Select(company => new DTOs.Company() { Id = company.Id, Name = company.Name });
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var repo = await unitOfWork.CompanyRepository;
+                var companies = await repo.List();
+                return companies.Select(company => new DTOs.Company() { Id = company.Id, Name = company.Name });
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ namespace IUGO.Turns.Services
 {
     public class TurnServices : StatefulService, ITurnService
     {
-        private IUnitOfWork _unitOfWork;
+        //private IUnitOfWork unitOfWork;
         private CancellationToken _cancellationToken;
         private readonly IVehiclesServices _vehicleService;
         private readonly EventEmitter<TurnAssignedMessageIntegrationEvent> _turnAssignedEmitter;
@@ -32,7 +32,7 @@ namespace IUGO.Turns.Services
         /// <inheritdoc />
         protected override Task RunAsync(CancellationToken cancellationToken)
         {
-            _unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager);
+            // _unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager);
             _cancellationToken = cancellationToken;
             return Task.CompletedTask;
         }
@@ -54,118 +54,142 @@ namespace IUGO.Turns.Services
 
         public async Task<OutputTurnModel> FindTurn(Guid id)
         {
-            var repo = await _unitOfWork.TurnsRepository;
-            var coreTurn = await repo.Find(id);
-            var outputModel = coreTurn.MapToOutputTurnModel();
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var repo = await unitOfWork.TurnsRepository;
+                var coreTurn = await repo.Find(id);
+                var outputModel = coreTurn.MapToOutputTurnModel();
 
-            return outputModel;
+                return outputModel;
+            }
         }
 
         public async Task<OutputTurnModel> CreateTurn(TurnInputModel turnInputModel)
         {
-            var repo = await _unitOfWork.TurnsRepository;
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var repo = await unitOfWork.TurnsRepository;
 
-            var vehicle = await _vehicleService.FindVehicle(turnInputModel.VehicleId);
+                var vehicle = await _vehicleService.FindVehicle(turnInputModel.VehicleId);
 
-            var turn = new Turn(turnInputModel.AvailableFrom
-                , turnInputModel.DriverId
-                , turnInputModel.VehicleId
-                , turnInputModel.VehicleDesignationId);
+                var turn = new Turn(turnInputModel.AvailableFrom
+                    , turnInputModel.DriverId
+                    , turnInputModel.VehicleId
+                    , turnInputModel.VehicleDesignationId);
 
-            var driverSpecification = new DriverSpecification(turn.DriverId);
-            var driverIsAlreadyInTurn = (await repo.ListBySpecification(driverSpecification)).Any();
-            if (driverIsAlreadyInTurn) throw new Exception("Driver is already in the queue");
+                var driverSpecification = new DriverSpecification(turn.DriverId);
+                var driverIsAlreadyInTurn = (await repo.ListBySpecification(driverSpecification)).Any();
+                if (driverIsAlreadyInTurn) throw new Exception("Driver is already in the queue");
 
-            var vehicleSpecification = new VehicleSpecification(turn.VehicleId);
-            var vehicleIsAlreadyInTurn = (await repo.ListBySpecification(vehicleSpecification)).Any();
-            if (vehicleIsAlreadyInTurn) throw new Exception("Vehicle is already in the queue");
+                var vehicleSpecification = new VehicleSpecification(turn.VehicleId);
+                var vehicleIsAlreadyInTurn = (await repo.ListBySpecification(vehicleSpecification)).Any();
+                if (vehicleIsAlreadyInTurn) throw new Exception("Vehicle is already in the queue");
 
-            await repo.Add(turn);
-            await _unitOfWork.Commit();
+                await repo.Add(turn);
+                await unitOfWork.Commit();
 
-            return turn.MapToOutputTurnModel();
+
+                return turn.MapToOutputTurnModel();
+            }
         }
 
         public async Task DeleteTurn(Guid id)
         {
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var repo = await unitOfWork.TurnsRepository;
+                var turnToBeDeleted = await repo.Find(id);
+                await repo.Delete(turnToBeDeleted);
 
-            var repo = await _unitOfWork.TurnsRepository;
-            var turnToBeDeleted = await repo.Find(id);
-            await repo.Delete(turnToBeDeleted);
-
-            await _unitOfWork.Commit();
+                await unitOfWork.Commit();
+            }
         }
 
         public async Task AddDestination(Guid turnId, string destinationId)
         {
-            var repo = await _unitOfWork.TurnsRepository;
-            var turn = await repo.Find(turnId);
-            turn.AddDestiniation(destinationId);
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var repo = await unitOfWork.TurnsRepository;
+                var turn = await repo.Find(turnId);
+                turn.AddDestiniation(destinationId);
 
-            await repo.Update(turnId, turn);
-            await _unitOfWork.Commit();
+                await repo.Update(turnId, turn);
+                await unitOfWork.Commit();
+            }
         }
 
         public async Task AddOrigin(Guid turnId, string originId)
         {
-            var repo = await _unitOfWork.TurnsRepository;
-            var turn = await repo.Find(turnId);
-            turn.AddOrigin(originId);
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var repo = await unitOfWork.TurnsRepository;
+                var turn = await repo.Find(turnId);
+                turn.AddOrigin(originId);
 
-            await repo.Update(turnId, turn);
-            await _unitOfWork.Commit();
+                await repo.Update(turnId, turn);
+                await unitOfWork.Commit();
+            }
         }
 
         public async Task<IEnumerable<OutputTurnModel>> FindTurnsNotAssignedBy(IEnumerable<string> destinationIds, IEnumerable<string> originIds, DateTime pickUpDate, IEnumerable<string> vehicleDesignationIds)
         {
-            var destinationSpecification = new GoingToSpecification(destinationIds);
-            var originSpecification = new PickingUpFromSpecification(originIds);
-            var pickUpDateSpecification = new PickUpDateSpecification(pickUpDate);
-            var vehicleDesignationSpecificaion = new VehicleDesignationSpecification(vehicleDesignationIds);
-            var turnAssignedSpecification = new TurnNotAssignedSpecification();
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var destinationSpecification = new GoingToSpecification(destinationIds);
+                var originSpecification = new PickingUpFromSpecification(originIds);
+                var pickUpDateSpecification = new PickUpDateSpecification(pickUpDate);
+                var vehicleDesignationSpecificaion = new VehicleDesignationSpecification(vehicleDesignationIds);
+                var turnAssignedSpecification = new TurnNotAssignedSpecification();
 
-            var shippingSpecification = destinationSpecification
-                                        .And(originSpecification)
-                                        .And(pickUpDateSpecification)
-                                        .And(vehicleDesignationSpecificaion)
-                                        .And(turnAssignedSpecification);
+                var shippingSpecification = destinationSpecification
+                    .And(originSpecification)
+                    .And(pickUpDateSpecification)
+                    .And(vehicleDesignationSpecificaion)
+                    .And(turnAssignedSpecification);
 
-            var repo = await _unitOfWork.TurnsRepository;
-            var availableTurns = await repo.ListBySpecification(shippingSpecification);
+                var repo = await unitOfWork.TurnsRepository;
+                var availableTurns = await repo.ListBySpecification(shippingSpecification);
 
-            var outputTurns = availableTurns.Select(turn => turn.MapToOutputTurnModel());
+                var outputTurns = availableTurns.Select(turn => turn.MapToOutputTurnModel());
 
-            return outputTurns;
+                return outputTurns;
+            }
         }
 
         public async Task AssignTurnToShippingService(Guid turnId, string shippingServiceId)
         {
-            var repo = await _unitOfWork.TurnsRepository;
-            var turn = await repo.Find(turnId);
-            turn.AssignShipping(shippingServiceId);
-            await repo.Update(turnId, turn);
-            await _unitOfWork.Commit();
-
-            var message = new TurnAssignedMessageIntegrationEvent()
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
             {
-                TurnId = turn.Id.ToString(),
-                DriverId = turn.DriverId,
-                VehicleId = turn.VehicleId,
-                ShippingServiceId = shippingServiceId,
-                VehicleDesignationId = turn.VehicleDesignationId
-            };
+                var repo = await unitOfWork.TurnsRepository;
+                var turn = await repo.Find(turnId);
+                turn.AssignShipping(shippingServiceId);
+                await repo.Update(turnId, turn);
+                await unitOfWork.Commit();
 
-            _turnAssignedEmitter.Emit(message);
+                var message = new TurnAssignedMessageIntegrationEvent()
+                {
+                    TurnId = turn.Id.ToString(),
+                    DriverId = turn.DriverId,
+                    VehicleId = turn.VehicleId,
+                    ShippingServiceId = shippingServiceId,
+                    VehicleDesignationId = turn.VehicleDesignationId
+                };
+
+                _turnAssignedEmitter.Emit(message);
+            }
         }
 
         public async Task AcceptShippingOffer(Guid turnId, string shippingServiceId)
         {
-            var repo = await _unitOfWork.TurnsRepository;
-            var turn = await repo.Find(turnId);
-            turn.AcceptShippingOffer(shippingServiceId);
-            await repo.Update(turnId, turn);
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var repo = await unitOfWork.TurnsRepository;
+                var turn = await repo.Find(turnId);
+                turn.AcceptShippingOffer(shippingServiceId);
+                await repo.Update(turnId, turn);
 
-            await _unitOfWork.Commit();
+                await unitOfWork.Commit();
+            }
         }
     }
 }

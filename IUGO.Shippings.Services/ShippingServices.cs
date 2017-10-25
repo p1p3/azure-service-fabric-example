@@ -27,7 +27,7 @@ namespace IUGO.Shippings.Services
         private readonly EventEmitter<ShippingPublishedIntegrationEvent> _shippingPublishedEventEmitter;
         private readonly EventEmitter<ShippingOfferAcceptedIntegrationEvent> _shippingOfferAccepted;
 
-        private IUnitOfWork _unitOfWork;
+        //private IUnitOfWork unitOfWork;
         private CancellationToken _cancellationToken;
 
         public ShippingServices(StatefulServiceContext context, EventEmitter<ShippingPublishedIntegrationEvent> shippingPublishedEventEmitter, EventEmitter<ShippingOfferAcceptedIntegrationEvent> shippingOfferAccepted)
@@ -47,114 +47,139 @@ namespace IUGO.Shippings.Services
 
         protected override Task RunAsync(CancellationToken cancellationToken)
         {
-            _unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager);
+           // unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager);
             _cancellationToken = cancellationToken;
             return Task.CompletedTask;
         }
 
         public async Task<ShippingOutputModel> FindShipping(Guid id)
         {
-            var repo = await _unitOfWork.ShippingsRepository;
-            var shipping = await repo.Find(id);
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var repo = await unitOfWork.ShippingsRepository;
+                var shipping = await repo.Find(id);
 
-            return shipping.MapToInterfaces();
+                return shipping.MapToInterfaces();
+            }
         }
 
         public async Task<ShippingOutputModel> CreateShipping(ShippingInputModel shippingInputModel)
         {
-            var shipping = Shipping.CreateShipping(shippingInputModel.OrignId,
-                shippingInputModel.DestinationId,
-                shippingInputModel.PickUpDate,
-                shippingInputModel.ShippingServiceName,
-                shippingInputModel.ShippingCost,
-                shippingInputModel.AllocationDeadline, shippingInputModel.Comments);
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var shipping = Shipping.CreateShipping(shippingInputModel.OrignId,
+                    shippingInputModel.DestinationId,
+                    shippingInputModel.PickUpDate,
+                    shippingInputModel.ShippingServiceName,
+                    shippingInputModel.ShippingCost,
+                    shippingInputModel.AllocationDeadline, shippingInputModel.Comments);
 
-            var repo = await _unitOfWork.ShippingsRepository;
+                var repo = await unitOfWork.ShippingsRepository;
 
-            var createdShipping = await repo.Add(shipping);
-            await _unitOfWork.Commit();
+                var createdShipping = await repo.Add(shipping);
+                await unitOfWork.Commit();
 
-            return createdShipping.MapToInterfaces();
+                return createdShipping.MapToInterfaces();
+            }
         }
 
         public async Task<ShippingOutputModel> AddRequiredVehicleDesignation(Guid id, string vehicleDesignationId)
         {
-            var repo = await _unitOfWork.ShippingsRepository;
-            var shipping = await repo.Find(id);
-            shipping.AddRequiredVehicleDesignation(vehicleDesignationId);
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var repo = await unitOfWork.ShippingsRepository;
+                var shipping = await repo.Find(id);
+                shipping.AddRequiredVehicleDesignation(vehicleDesignationId);
 
-            await UpdateShipping(shipping);
+                await UpdateShipping(shipping, unitOfWork);
 
-            return shipping.MapToInterfaces();
+                return shipping.MapToInterfaces();
+            }
         }
 
         public async Task<ShippingOutputModel> AddCandidate(ShippingTurn canadidate, Guid shippingId)
         {
-            var repo = await _unitOfWork.ShippingsRepository;
-            var shipping = await repo.Find(shippingId);
-            shipping.AddCandidate(canadidate.MapToCore());
-
-            await UpdateShipping(shipping);
-
-            var eventMessage = new ShippingOfferAcceptedIntegrationEvent()
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
             {
-                ShippingId = shippingId.ToString(),
-                TurnId = canadidate.TurnId
-            };
+                var repo = await unitOfWork.ShippingsRepository;
+                var shipping = await repo.Find(shippingId);
+                shipping.AddCandidate(canadidate.MapToCore());
 
-            _shippingOfferAccepted.Emit(eventMessage);
+                await UpdateShipping(shipping, unitOfWork);
 
-            return shipping.MapToInterfaces();
+                var eventMessage = new ShippingOfferAcceptedIntegrationEvent()
+                {
+                    ShippingId = shippingId.ToString(),
+                    TurnId = canadidate.TurnId
+                };
+
+                _shippingOfferAccepted.Emit(eventMessage);
+
+                return shipping.MapToInterfaces();
+            }
         }
 
         public async Task<ShippingOutputModel> AssignTurn(ShippingTurn turn, Guid shippingId)
         {
-            var repo = await _unitOfWork.ShippingsRepository;
-            var shipping = await repo.Find(shippingId);
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var repo = await unitOfWork.ShippingsRepository;
+                var shipping = await repo.Find(shippingId);
 
-            shipping.AssignTurn(turn.MapToCore());
+                shipping.AssignTurn(turn.MapToCore());
 
-            await UpdateShipping(shipping);
+                await UpdateShipping(shipping, unitOfWork);
 
-            return shipping.MapToInterfaces();
-            //TODO emit event to notify driver 
+                return shipping.MapToInterfaces();
+                //TODO emit event to notify driver 
+            }
         }
 
- 
+
         public async Task SetShippingAsDelivered(Guid id)
         {
-            var repo = await _unitOfWork.ShippingsRepository;
-            var shipping = await repo.Find(id);
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var repo = await unitOfWork.ShippingsRepository;
+                var shipping = await repo.Find(id);
 
-            shipping.ChangeStateToDelivered();
-            await UpdateShipping(shipping);
+                shipping.ChangeStateToDelivered();
+                await UpdateShipping(shipping, unitOfWork);
+            }
         }
 
         public async Task SetShippingAsPickedUp(Guid id)
         {
-            var repo = await _unitOfWork.ShippingsRepository;
-            var shipping = await repo.Find(id);
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var repo = await unitOfWork.ShippingsRepository;
+                var shipping = await repo.Find(id);
 
-            shipping.ChangeStateToPickedUp();
-            await UpdateShipping(shipping);
+                shipping.ChangeStateToPickedUp();
+                await UpdateShipping(shipping, unitOfWork);
+            }
         }
 
         public async Task PublishShipping(Guid id)
         {
-            var repo = await _unitOfWork.ShippingsRepository;
-            var shipping = await repo.Find(id);
+            using (var unitOfWork = new UnitOfWorkReliableStateManager(this.StateManager))
+            {
+                var repo = await unitOfWork.ShippingsRepository;
+                var shipping = await repo.Find(id);
 
-            shipping.PublishShippingOrder();
-            await UpdateShipping(shipping);
+                shipping.PublishShippingOrder();
+                await UpdateShipping(shipping, unitOfWork);
 
-            _shippingPublishedEventEmitter.Emit(new ShippingPublishedIntegrationEvent(){ShippingInformation = shipping.MapToInterfaces()});
+                _shippingPublishedEventEmitter.Emit(
+                    new ShippingPublishedIntegrationEvent() { ShippingInformation = shipping.MapToInterfaces() });
+            }
         }
 
-        private async Task UpdateShipping(Shipping shipping)
+        private async Task UpdateShipping(Shipping shipping, IUnitOfWork unitOfWork)
         {
-            var repo = await _unitOfWork.ShippingsRepository;
+            var repo = await unitOfWork.ShippingsRepository;
             await repo.Update(shipping.Id, shipping);
-            await _unitOfWork.Commit();
+            await unitOfWork.Commit();
         }
     }
 }
