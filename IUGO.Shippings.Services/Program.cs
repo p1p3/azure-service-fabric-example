@@ -21,15 +21,13 @@ namespace IUGO.Shippings.Services
                 // Registering a service maps a service type name to a .NET type.
                 // When Service Fabric creates an instance of this service type,
                 // an instance of the class is created in this host process.
-                var eventBus = ServiceBusFactory.CreateAzureEventBusInstance(
-                    "Endpoint=sb://fjaramillo.servicebus.windows.net/;SharedAccessKeyName=manage;SharedAccessKey=u/M4nP3NUhfiBF7Ciuk+as6IuqmmBeGyh+l+t2V9orY=;EntityPath=shipping-published",
-                    "shipping-services");
+                var eventBus = ServiceBusFactory.CreateAzureEventBusPublisherInstance(
+                    "Endpoint=sb://fjaramillo.servicebus.windows.net/;SharedAccessKeyName=manage;SharedAccessKey=u/M4nP3NUhfiBF7Ciuk+as6IuqmmBeGyh+l+t2V9orY=;EntityPath=shipping-published");
 
                 var turnAssignedEventEmitter = new EventEmitter<ShippingPublishedIntegrationEvent>(eventBus);
 
-                var eventBusForOffers = ServiceBusFactory.CreateAzureEventBusInstance(
-                    "Endpoint=sb://fjaramillo.servicebus.windows.net/;SharedAccessKeyName=manage;SharedAccessKey=FvKlnrh/74PqqUZ+8R6EvNa4STsfW+dmvZ/NViWw7NM=;EntityPath=shipping-offer-accepted",
-                    "shipping-services");
+                var eventBusForOffers = ServiceBusFactory.CreateAzureEventBusPublisherInstance(
+                    "Endpoint=sb://fjaramillo.servicebus.windows.net/;SharedAccessKeyName=manage;SharedAccessKey=FvKlnrh/74PqqUZ+8R6EvNa4STsfW+dmvZ/NViWw7NM=;EntityPath=shipping-offer-accepted");
 
                 var shippingOfferAcceptedEventEmitter = new EventEmitter<ShippingOfferAcceptedIntegrationEvent>(eventBusForOffers);
 

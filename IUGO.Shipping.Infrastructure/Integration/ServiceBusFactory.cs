@@ -5,10 +5,11 @@ namespace IUGO.Shippings.Infrastructure.Integration
 {
     public class ServiceBusFactory
     {
-        public static IEventBus CreateAzureEventBusInstance(string serviceBusConnectionString, string subscriptionClientName)
+        public static IEventBusPublisher CreateAzureEventBusPublisherInstance(string serviceBusConnectionString)
         {
             var defaultPersister = new DefaultServiceBusPersisterConnection(serviceBusConnectionString);
-            return new EventBusServiceBus(defaultPersister, subscriptionClientName, IntegrationHandlersProvider.CreateDeafultHandlerResolver());
+
+            return new EventBusServiceBusPublisher(defaultPersister);
         }
     }
 }

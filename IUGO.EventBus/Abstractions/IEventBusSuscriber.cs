@@ -2,7 +2,7 @@
 
 namespace IUGO.EventBus.Abstractions
 {
-    public interface IEventBus : IDisposable
+    public interface IEventBusSuscriber : IDisposable
     {
         void Subscribe<T, TH>()
             where T : IntegrationEvent
@@ -17,7 +17,5 @@ namespace IUGO.EventBus.Abstractions
         void Unsubscribe<T, TH>()
             where TH : IIntegrationEventHandler<T>
             where T : IntegrationEvent;
-
-        void Publish(IntegrationEvent @event);
     }
 }

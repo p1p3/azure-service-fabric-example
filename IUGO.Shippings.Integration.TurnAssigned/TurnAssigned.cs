@@ -62,7 +62,7 @@ namespace IUGO.Shippings.Integration.TurnAssigned
 
             var eventBus = ConfigureEventBus(serviceBusConnectionString, subscriptionClientName, services);
 
-            services.AddSingleton<IEventBus>(context => eventBus);
+            services.AddSingleton<IEventBusSuscriber>(context => eventBus);
             services.AddTransient<ServiceBusEventBusListener<TurnAssignedMessageIntegrationEvent, AssignTurnToShippingHandler>>();
 
             var provider = services.BuildServiceProvider();
@@ -70,12 +70,12 @@ namespace IUGO.Shippings.Integration.TurnAssigned
             return provider;
         }
 
-        public static IEventBus ConfigureEventBus(string serviceBusConnectionString, string subscriptionClientName, IServiceCollection serviceCollection)
+        public static IEventBusSuscriber ConfigureEventBus(string serviceBusConnectionString, string subscriptionClientName, IServiceCollection serviceCollection)
         {
             var provider = serviceCollection.BuildServiceProvider();
             var serviceResolver = new IntegrationHandlersProvider(provider);
             var defaultPersister = new DefaultServiceBusPersisterConnection(serviceBusConnectionString);
-            return new EventBusServiceBus(defaultPersister, subscriptionClientName, serviceResolver);
+            return new EventBusServiceBusSuscriber(defaultPersister, subscriptionClientName, serviceResolver);
         }
     }
 }
