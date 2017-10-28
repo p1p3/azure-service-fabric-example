@@ -15,10 +15,8 @@ namespace IUGO.EventBus.AzureServiceBus
         private readonly IEventBusSubscriptionsManager _subsManager;
         private readonly IHandlerServiceProvider _handlerServiceProvider;
 
-        private const string INTEGRATION_EVENT_SUFIX = "IntegrationEvent";
-
         public EventBusServiceBusSuscriber(IServiceBusPersisterConnection serviceBusPersisterConnection,
-            IEventBusSubscriptionsManager subsManager, string subscriptionClientName, IHandlerServiceProvider handlerServiceProvider)
+               IEventBusSubscriptionsManager subsManager, string subscriptionClientName, IHandlerServiceProvider handlerServiceProvider)
         {
             _subsManager = subsManager;
             _handlerServiceProvider = handlerServiceProvider;
@@ -48,7 +46,7 @@ namespace IUGO.EventBus.AzureServiceBus
             where T : IntegrationEvent
             where TH : IIntegrationEventHandler<T>
         {
-            var eventName = typeof(T).Name.Replace(INTEGRATION_EVENT_SUFIX, "");
+            var eventName = typeof(T).Name.Replace(IntegrationEvent.INTEGRATION_EVENT_SUFIX, "");
 
             var containsKey = _subsManager.HasSubscriptionsForEvent<T>();
             if (!containsKey)
@@ -67,7 +65,7 @@ namespace IUGO.EventBus.AzureServiceBus
             where T : IntegrationEvent
             where TH : IIntegrationEventHandler<T>
         {
-            var eventName = typeof(T).Name.Replace(INTEGRATION_EVENT_SUFIX, "");
+            var eventName = typeof(T).Name.Replace(IntegrationEvent.INTEGRATION_EVENT_SUFIX, "");
 
             _subscriptionClient
                 .RemoveRuleAsync(eventName)
@@ -107,7 +105,7 @@ namespace IUGO.EventBus.AzureServiceBus
             _subscriptionClient.RegisterMessageHandler(
                 async (message, token) =>
                 {
-                    var eventName = $"{message.Label}{INTEGRATION_EVENT_SUFIX}";
+                    var eventName = $"{message.Label}{IntegrationEvent.INTEGRATION_EVENT_SUFIX}";
                     var messageData = Encoding.UTF8.GetString(message.Body);
                     await ProcessEvent(eventName, messageData);
 

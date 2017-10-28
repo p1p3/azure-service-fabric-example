@@ -11,8 +11,6 @@ namespace IUGO.EventBus.AzureServiceBus
     {
         private readonly IServiceBusPersisterConnection _serviceBusPersisterConnection;
 
-        private const string INTEGRATION_EVENT_SUFIX = "IntegrationEvent";
-
         public EventBusServiceBusPublisher(IServiceBusPersisterConnection serviceBusPersisterConnection)
         {
             _serviceBusPersisterConnection = serviceBusPersisterConnection;
@@ -20,7 +18,7 @@ namespace IUGO.EventBus.AzureServiceBus
 
         public void Publish(IntegrationEvent @event)
         {
-            var eventName = @event.GetType().Name.Replace(INTEGRATION_EVENT_SUFIX, "");
+            var eventName = @event.GetType().Name.Replace(IntegrationEvent.INTEGRATION_EVENT_SUFIX, "");
             var jsonMessage = JsonConvert.SerializeObject(@event);
             var body = Encoding.UTF8.GetBytes(jsonMessage);
 

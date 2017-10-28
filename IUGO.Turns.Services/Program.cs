@@ -26,11 +26,10 @@ namespace IUGO.Turns.Services
                 // an instance of the class is created in this host process.
                 var serviceName = typeof(TurnServices).Name;
 
-                var eventBus = ServiceBusFactory.CreateAzureEventBusInstance(
-                    "Endpoint=sb://fjaramillo.servicebus.windows.net/;SharedAccessKeyName=manage;SharedAccessKey=mVb/KgmcNz6VMhUf8u+UxXfA3RHusg/eafWcS5KYS18=;EntityPath=turn-assigned",
-                    "turn-services");
+                var eventBusPublisher = ServiceBusFactory.CreateAzureEventBusPublisherInstance(
+                    "Endpoint=sb://fjaramillo.servicebus.windows.net/;SharedAccessKeyName=manage;SharedAccessKey=mVb/KgmcNz6VMhUf8u+UxXfA3RHusg/eafWcS5KYS18=;EntityPath=turn-assigned");
 
-                var turnAssignedEventEmitter = new EventEmitter<TurnAssignedMessageIntegrationEvent>(eventBus);
+                var turnAssignedEventEmitter = new EventEmitter<TurnAssignedMessageIntegrationEvent>(eventBusPublisher);
 
                 ServiceRuntime.RegisterServiceAsync("IUGO.Turns.ServicesType",
                     context => new TurnServices(context, CreateVehicleService(), turnAssignedEventEmitter)).GetAwaiter().GetResult();

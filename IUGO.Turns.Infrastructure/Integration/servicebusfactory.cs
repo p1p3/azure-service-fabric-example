@@ -5,7 +5,7 @@ namespace IUGO.Turns.Infrastructure.Integration
 {
     public class ServiceBusFactory
     {
-        public static IEventBusPublisher CreateAzureEventBusInstance(string serviceBusConnectionString, string subscriptionClientName)
+        public static IEventBusPublisher CreateAzureEventBusPublisherInstance(string serviceBusConnectionString)
         {
             var defaultPersister = new DefaultServiceBusPersisterConnection(serviceBusConnectionString);
             return new EventBusServiceBusPublisher(defaultPersister);

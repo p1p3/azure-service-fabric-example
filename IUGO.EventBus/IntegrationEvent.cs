@@ -12,5 +12,7 @@ namespace IUGO.EventBus
 
         public Guid Id { get; }
         public DateTime CreationDate { get; }
+
+        public const string INTEGRATION_EVENT_SUFIX = "IntegrationEvent";
     }
 }
