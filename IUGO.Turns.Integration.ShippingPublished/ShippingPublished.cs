@@ -35,7 +35,6 @@ namespace IUGO.Turns.Integration.ShippingPublished
                 new ServiceInstanceListener(context =>serviceProvider.GetService<ServiceBusEventBusListener<ShippingPublishedIntegrationEvent, FindAndNotifyMatchingTurns>>(), "StatelessService-ServiceBusQueueListener")
             };
         }
-
     }
 
     internal class ServiceConfiguration
@@ -56,7 +55,7 @@ namespace IUGO.Turns.Integration.ShippingPublished
 
             var eventBus = ConfigureEventBus(serviceBusConnectionString, subscriptionClientName, services);
 
-            services.AddSingleton<IEventBus>(context => eventBus);
+            services.AddSingleton<IEventBusSuscriber>(context => eventBus);
             services.AddTransient<ServiceBusEventBusListener<ShippingPublishedIntegrationEvent, FindAndNotifyMatchingTurns>>();
 
 
@@ -64,12 +63,12 @@ namespace IUGO.Turns.Integration.ShippingPublished
 
             return provider;
         }
-        public static IEventBus ConfigureEventBus(string serviceBusConnectionString, string subscriptionClientName, IServiceCollection serviceCollection)
+        public static IEventBusSuscriber ConfigureEventBus(string serviceBusConnectionString, string subscriptionClientName, IServiceCollection serviceCollection)
         {
             var provider = serviceCollection.BuildServiceProvider();
             var serviceResolver = new IntegrationHandlersProvider(provider);
             var defaultPersister = new DefaultServiceBusPersisterConnection(serviceBusConnectionString);
-            return new EventBusServiceBus(defaultPersister, subscriptionClientName, serviceResolver);
+            return new EventBusServiceBusSuscriber(defaultPersister, subscriptionClientName, serviceResolver);
         }
     }
 }

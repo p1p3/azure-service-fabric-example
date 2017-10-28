@@ -9,25 +9,19 @@ using Newtonsoft.Json;
 
 namespace IUGO.EventBus.AzureServiceBus
 {
-    public class EventBusServiceBus : IEventBusSuscriber , IEventBusPublisher
+    public class EventBusServiceBusSuscriber : IEventBusSuscriber
     {
-        private readonly IServiceBusPersisterConnection _serviceBusPersisterConnection;
-        private readonly IEventBusSubscriptionsManager _subsManager;
         private readonly SubscriptionClient _subscriptionClient;
-
-        //private readonly ILifetimeScope _autofac;
-        private readonly string AUTOFAC_SCOPE_NAME = "IUGO_event_bus";
-
-        private const string INTEGRATION_EVENT_SUFIX = "IntegrationEvent";
+        private readonly IEventBusSubscriptionsManager _subsManager;
         private readonly IHandlerServiceProvider _handlerServiceProvider;
 
+        private const string INTEGRATION_EVENT_SUFIX = "IntegrationEvent";
 
-        public EventBusServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection,
+        public EventBusServiceBusSuscriber(IServiceBusPersisterConnection serviceBusPersisterConnection,
             IEventBusSubscriptionsManager subsManager, string subscriptionClientName, IHandlerServiceProvider handlerServiceProvider)
         {
-            _handlerServiceProvider = handlerServiceProvider;
-            _serviceBusPersisterConnection = serviceBusPersisterConnection;
             _subsManager = subsManager;
+            _handlerServiceProvider = handlerServiceProvider;
 
             _subscriptionClient = new SubscriptionClient(serviceBusPersisterConnection.ServiceBusConnectionStringBuilder,
                 subscriptionClientName);
@@ -36,32 +30,12 @@ namespace IUGO.EventBus.AzureServiceBus
             RegisterSubscriptionClientMessageHandler();
         }
 
-        public EventBusServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection, string subscriptionClientName) : this(serviceBusPersisterConnection, new InMemoryEventBusSubscriptionsManager(), subscriptionClientName, null)
+        public EventBusServiceBusSuscriber(IServiceBusPersisterConnection serviceBusPersisterConnection, string subscriptionClientName) : this(serviceBusPersisterConnection, new InMemoryEventBusSubscriptionsManager(), subscriptionClientName, null)
         {
         }
 
-        public EventBusServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection, string subscriptionClientName, IHandlerServiceProvider sericeProvider) : this(serviceBusPersisterConnection, new InMemoryEventBusSubscriptionsManager(), subscriptionClientName, sericeProvider)
+        public EventBusServiceBusSuscriber(IServiceBusPersisterConnection serviceBusPersisterConnection, string subscriptionClientName, IHandlerServiceProvider serviceProvider) : this(serviceBusPersisterConnection, new InMemoryEventBusSubscriptionsManager(), subscriptionClientName, serviceProvider)
         {
-        }
-
-        public void Publish(IntegrationEvent @event)
-        {
-            var eventName = @event.GetType().Name.Replace(INTEGRATION_EVENT_SUFIX, "");
-            var jsonMessage = JsonConvert.SerializeObject(@event);
-            var body = Encoding.UTF8.GetBytes(jsonMessage);
-
-            var message = new Message
-            {
-                MessageId = new Guid().ToString(),
-                Body = body,
-                Label = eventName,
-            };
-
-            var topicClient = _serviceBusPersisterConnection.CreateModel();
-
-            topicClient.SendAsync(message)
-                .GetAwaiter()
-                .GetResult();
         }
 
         public void SubscribeDynamic<TH>(string eventName)
@@ -96,9 +70,9 @@ namespace IUGO.EventBus.AzureServiceBus
             var eventName = typeof(T).Name.Replace(INTEGRATION_EVENT_SUFIX, "");
 
             _subscriptionClient
-             .RemoveRuleAsync(eventName)
-             .GetAwaiter()
-             .GetResult();
+                .RemoveRuleAsync(eventName)
+                .GetAwaiter()
+                .GetResult();
 
             _subsManager.RemoveSubscription<T, TH>();
         }
@@ -112,6 +86,20 @@ namespace IUGO.EventBus.AzureServiceBus
         public void Dispose()
         {
             _subsManager.Clear();
+        }
+
+        private void RemoveDefaultRule()
+        {
+            var defaultRuleExist = _subscriptionClient.GetRulesAsync()
+                .GetAwaiter().GetResult()
+                .Any(rule => rule.Name == RuleDescription.DefaultRuleName);
+
+            if (defaultRuleExist)
+            {
+                _subscriptionClient.RemoveRuleAsync(RuleDescription.DefaultRuleName)
+                    .GetAwaiter()
+                    .GetResult();
+            }
         }
 
         private void RegisterSubscriptionClientMessageHandler()
@@ -154,20 +142,6 @@ namespace IUGO.EventBus.AzureServiceBus
 
                     await (Task)concreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
                 }
-            }
-        }
-
-        private void RemoveDefaultRule()
-        {
-            var defaultRuleExist = _subscriptionClient.GetRulesAsync()
-                .GetAwaiter().GetResult()
-                .Any(rule => rule.Name == RuleDescription.DefaultRuleName);
-
-            if (defaultRuleExist)
-            {
-                _subscriptionClient.RemoveRuleAsync(RuleDescription.DefaultRuleName)
-                    .GetAwaiter()
-                    .GetResult();
             }
         }
     }

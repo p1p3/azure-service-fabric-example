@@ -5,16 +5,16 @@ namespace IUGO.Turns.Infrastructure.Integration
 {
     public class EventEmitter<T> where T : IntegrationEvent
     {
-        private readonly IEventBus _eventBus;
+        private readonly IEventBusPublisher _eventBusPublisher;
 
-        public EventEmitter(IEventBus eventBus)
+        public EventEmitter(IEventBusPublisher eventBusPublisher)
         {
-            _eventBus = eventBus;
+            _eventBusPublisher = eventBusPublisher;
         }
 
         public void Emit(T eventMessage)
         {
-            _eventBus.Publish(eventMessage);
+            _eventBusPublisher.Publish(eventMessage);
         }
     }
 }

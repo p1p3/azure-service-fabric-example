@@ -8,11 +8,11 @@ namespace IUGO.EventBus.AzureServiceFabric.ServiceListener
     public class ServiceBusEventBusListener<T, TH> : ICommunicationListener where T : IntegrationEvent
         where TH : IIntegrationEventHandler<T>
     {
-        private IEventBus _eventBus;
+        private IEventBusSuscriber _eventBusSuscriber;
 
-        public ServiceBusEventBusListener(IEventBus eventBus)
+        public ServiceBusEventBusListener(IEventBusSuscriber eventBusSuscriber)
         {
-            _eventBus = eventBus;
+            _eventBusSuscriber = eventBusSuscriber;
         }
 
         public void Abort()
@@ -30,15 +30,15 @@ namespace IUGO.EventBus.AzureServiceFabric.ServiceListener
 
         public Task<string> OpenAsync(CancellationToken cancellationToken)
         {
-            _eventBus.Subscribe<T, TH>();
+            _eventBusSuscriber.Subscribe<T, TH>();
             return Task.FromResult(string.Empty);
         }
 
         private void Stop()
         {
-            _eventBus.Unsubscribe<T, TH>();
-            _eventBus.Dispose();
-            _eventBus = null;
+            _eventBusSuscriber.Unsubscribe<T, TH>();
+            _eventBusSuscriber.Dispose();
+            _eventBusSuscriber = null;
         }
     }
 }
