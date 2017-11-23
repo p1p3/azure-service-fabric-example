@@ -39,6 +39,8 @@
     <ProjectReference Include="..\IUGO.Shippings.API\IUGO.Shippings.API.csproj" />
     <ProjectReference Include="..\IUGO.Shippings.Integration.TurnAssigned\IUGO.Shippings.Integration.TurnAssigned.csproj" />
     <ProjectReference Include="..\IUGO.Shippings.Services\IUGO.Shippings.Services.csproj" />
+    <ProjectReference Include="..\IUGO.TransportationAssets.API\IUGO.TransportationAssets.API.csproj" />
+    <ProjectReference Include="..\IUGO.TransportationAssets.Services\IUGO.TransportationAssets.Services.csproj" />
     <ProjectReference Include="..\IUGO.Turns.API\IUGO.Turns.API.csproj" />
     <ProjectReference Include="..\IUGO.Turns.Integration.ShippingOfferAccepted\IUGO.Turns.Integration.ShippingOfferAccepted.csproj" />
     <ProjectReference Include="..\IUGO.Turns.Integration.ShippingPublished\IUGO.Turns.Integration.ShippingPublished.csproj" />

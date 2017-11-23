@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.1" />
     <PackageReference Include="Microsoft.ServiceFabric" Version="5.7.198" />
     <PackageReference Include="Microsoft.ServiceFabric.AspNetCore.Kestrel" Version="2.7.198" />
     <PackageReference Include="Microsoft.ServiceFabric.Data" Version="2.7.198" />
@@ -21,12 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\IUGO.TransportationAssets.Services.Interfaces\IUGO.TransportationAssets.Services.Interfaces.csproj" />
-    <ProjectReference Include="..\IUGO.Vehicles.Services.Interfaces\IUGO.Vehicles.Services.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>
